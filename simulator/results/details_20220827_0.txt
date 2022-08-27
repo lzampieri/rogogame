@@ -1,0 +1,11 @@
+Using 8 vertices
+Starting by Nessuna freccia
+Red player start
+Red player plays randomly
+Blu player plays randomly
+
+the final winning probabilities are:
+Red win: 42.8197%
+Tie    : 14.3605%
+Blu win: 42.8197%
+

@@ -1,0 +1,5 @@
+# Visual studio stuff
+.vscode/
+
+# Compiled executables
+*.exe
