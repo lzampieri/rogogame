@@ -2,14 +2,10 @@ module.exports = {
     colors: {
         transparent: 'transparent',
         current: 'currentColor',
-        text: {
-            'main': '#fff8e0',
-            'spot': '#15fd01'
-        },
-        background: {
-            'dark': '#333',
-            'highlighted': '#fff8e040',
-            'paper': '#041704'
-        },
+        background: '#FFECD1',
+        player1: '#FF7D00',
+        player2: '#15616D',
+        text: '#78290F',
+        info: '#001524'
     },
 }

@@ -15,8 +15,13 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('TitlePage');
 });
+
+Route::get('/game_ai/{type}', function ($type) {
+    return Inertia::render('GameAI', [ 'type' => $type ] );
+})->where('type', '(random|probs|squared_probs|win)')
+  ->name('game_ai');
 
 Route::get('/NewPage', function () {
     return Inertia::render('NewPage');
