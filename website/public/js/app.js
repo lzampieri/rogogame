@@ -2137,10 +2137,10 @@ function Arrow(props) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     function resizeDetected() {
       setL(maxL > ref.current.offsetWidth ? ref.current.offsetWidth : maxL);
-      console.log(ref.current.offsetWidth);
     }
 
     window.addEventListener('resize', resizeDetected);
+    resizeDetected();
     return function () {
       return window.removeEventListener('resize', resizeDetected);
     };
@@ -2182,20 +2182,27 @@ function Arrow(props) {
 
 /***/ }),
 
-/***/ "./resources/js/GameGraphycs/SideColumn.js":
-/*!*************************************************!*\
-  !*** ./resources/js/GameGraphycs/SideColumn.js ***!
-  \*************************************************/
+/***/ "./resources/js/GameGraphycs/CentralCanvas.js":
+/*!****************************************************!*\
+  !*** ./resources/js/GameGraphycs/CentralCanvas.js ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ SideColumn)
+/* harmony export */   "default": () => (/* binding */ CentralCanvas)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _Arrow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Arrow */ "./resources/js/GameGraphycs/Arrow.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Connect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Connect */ "./resources/js/GameGraphycs/Connect.js");
+/* harmony import */ var linspace__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! linspace */ "./node_modules/linspace/index.js");
+/* harmony import */ var linspace__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(linspace__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _StateOfGame__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StateOfGame */ "./resources/js/GameGraphycs/StateOfGame.js");
+/* harmony import */ var _NewArrowsDrawer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./NewArrowsDrawer */ "./resources/js/GameGraphycs/NewArrowsDrawer.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2212,28 +2219,401 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-function SideColumn(props) {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      active = _useState2[0],
-      setActive = _useState2[1];
 
+
+
+
+
+function CentralCanvas(props) {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(100),
+      _useState2 = _slicedToArray(_useState, 2),
+      L = _useState2[0],
+      setL = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(100),
+      _useState4 = _slicedToArray(_useState3, 2),
+      H = _useState4[0],
+      setH = _useState4[1];
+
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    function resizeDetected() {
+      setL(ref.current.offsetWidth);
+      setH(ref.current.offsetHeight);
+    }
+
+    window.addEventListener('resize', resizeDetected);
+    resizeDetected();
+    return function () {
+      return window.removeEventListener('resize', resizeDetected);
+    };
+  });
+  var mid_x = L / 2;
+  var ys = linspace__WEBPACK_IMPORTED_MODULE_4___default()(0.2 * H, 0.8 * H, 8);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+    className: "w-full grow flex flex-row justify-center my-4",
+    ref: ref,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Stage, {
+      width: L,
+      height: H,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_StateOfGame__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        mid_x: mid_x,
+        ys: ys,
+        gamestate: props.gamestate
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_NewArrowsDrawer__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        mid_x: mid_x,
+        ys: ys,
+        width: L,
+        height: H,
+        color: props.gamestate.nextPlayer() == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_2___default().colors.player1) : (_theme__WEBPACK_IMPORTED_MODULE_2___default().colors.player2),
+        addArrow: function addArrow(arr) {
+          return props.addArrow(arr);
+        }
+      })]
+    })
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/GameGraphycs/Connect.js":
+/*!**********************************************!*\
+  !*** ./resources/js/GameGraphycs/Connect.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Connect)
+/* harmony export */ });
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GameLogic/GameState */ "./resources/js/GameLogic/GameState.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+function Connect(props) {
+  var from = _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_1__["default"].arr_from(props.arrow);
+  var to = _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_1__["default"].arr_to(props.arrow);
+  var points = [props.x, props.ys[from], props.x + 0.05 * props.x * (from - to), (props.ys[from] + props.ys[to]) / 2, props.x, props.ys[to]];
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Arrow, {
+    points: points,
+    tension: 1,
+    fill: props.color,
+    stroke: props.color
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/GameGraphycs/NewArrowsDrawer.js":
+/*!******************************************************!*\
+  !*** ./resources/js/GameGraphycs/NewArrowsDrawer.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ NewArrowsDrawer)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameLogic/GameState */ "./resources/js/GameLogic/GameState.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+function NewArrowsDrawer(props) {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_theme__WEBPACK_IMPORTED_MODULE_3___default().colors.background)),
+      _useState2 = _slicedToArray(_useState, 2),
+      bg = _useState2[0],
+      setbg = _useState2[1];
+
+  var step = (props.ys[1] - props.ys[0]) / 3;
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(-1),
+      _useState4 = _slicedToArray(_useState3, 2),
+      from = _useState4[0],
+      setFrom = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+      _useState6 = _slicedToArray(_useState5, 2),
+      mouse = _useState6[0],
+      setMouse = _useState6[1];
+
+  function isNear(pos) {
+    var point = -1;
+
+    if (Math.abs(pos.x - props.mid_x) < step) {
+      props.ys.some(function (y, i) {
+        if (Math.sqrt(Math.pow(pos.x - props.mid_x, 2) + Math.pow(pos.y - y, 2)) < step) {
+          point = i;
+          return true;
+        }
+
+        return false;
+      });
+    }
+
+    return point;
+  }
+
+  function manageOnPointerDown(e) {
+    var pos = e.target.getStage().getPointerPosition();
+    setMouse(pos);
+    setFrom(isNear(pos));
+  }
+
+  function manageOnPointerMove(e) {
+    if (from > -1) {
+      var pos = e.target.getStage().getPointerPosition();
+      var point = isNear(pos);
+      if (point > -1) setMouse({
+        x: props.mid_x,
+        y: props.ys[point]
+      });else setMouse(pos);
+    }
+  }
+
+  function manageOnPointerUp(e) {
+    var to = isNear(e.target.getStage().getPointerPosition());
+
+    if (to > -1) {
+      props.addArrow(_GameLogic_GameState__WEBPACK_IMPORTED_MODULE_2__["default"].arr(from, to));
+    }
+
+    setFrom(-1);
+  }
+
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Layer, {
+    onPointerDown: function onPointerDown(e) {
+      return manageOnPointerDown(e);
+    },
+    onPointerMove: function onPointerMove(e) {
+      return manageOnPointerMove(e);
+    },
+    onPointerUp: function onPointerUp(e) {
+      return manageOnPointerUp(e);
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Rect, {
+      x: 0,
+      y: 0,
+      width: props.width,
+      height: props.height
+    }), from > -1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_1__.Arrow, {
+      points: [props.mid_x, props.ys[from], mouse.x, mouse.y],
+      tension: 1,
+      fill: props.color,
+      stroke: props.color
+    })]
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/GameGraphycs/SideColumn.js":
+/*!*************************************************!*\
+  !*** ./resources/js/GameGraphycs/SideColumn.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SideColumn)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _Arrow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Arrow */ "./resources/js/GameGraphycs/Arrow.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+function SideColumn(props) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "\r w-1/5\r flex flex-col justify-between items-center\r ",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
       children: "Questo sopra"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-      onClick: function onClick() {
-        return setActive(!active);
-      },
       children: ["Questo ", props.side]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Arrow__WEBPACK_IMPORTED_MODULE_1__["default"], {
       color: props.side == 1 ? 'red' : 'blue',
       direction: props.side == 1 ? 'up' : 'down',
-      active: active
+      active: props.active
     })]
   });
 }
+
+/***/ }),
+
+/***/ "./resources/js/GameGraphycs/StateOfGame.js":
+/*!**************************************************!*\
+  !*** ./resources/js/GameGraphycs/StateOfGame.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StateOfGame)
+/* harmony export */ });
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Connect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Connect */ "./resources/js/GameGraphycs/Connect.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+
+function StateOfGame(props) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Layer, {
+    children: [props.ys.map(function (y, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Circle, {
+        x: props.mid_x,
+        y: y,
+        radius: 5,
+        fill: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.text)
+      }, i);
+    }), props.gamestate.arrows_red.map(function (a) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Connect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        arrow: a,
+        color: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1),
+        x: props.mid_x,
+        ys: props.ys
+      }, a);
+    }), props.gamestate.arrows_blu.map(function (a) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Connect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        arrow: a,
+        color: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2),
+        x: props.mid_x,
+        ys: props.ys
+      }, a);
+    })]
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/GameLogic/GameState.js":
+/*!*********************************************!*\
+  !*** ./resources/js/GameLogic/GameState.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GameState)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var GameState = /*#__PURE__*/function () {
+  function GameState() {
+    _classCallCheck(this, GameState);
+
+    _defineProperty(this, "arrows_red", void 0);
+
+    _defineProperty(this, "arrows_blu", void 0);
+
+    this.arrows_red = [];
+    this.arrows_blu = [];
+  }
+
+  _createClass(GameState, [{
+    key: "nextPlayer",
+    value: function nextPlayer() {
+      if (this.arrows_blu.length < this.arrows_red.length) return 2;else return 1;
+    }
+  }, {
+    key: "add",
+    value: function add(arr) {
+      if (this.arrows_blu.length < this.arrows_red.length) this.arrows_blu.push(arr);else this.arrows_red.push(arr);
+      console.log("Added %d", arr);
+    }
+  }, {
+    key: "drawable",
+    value: function drawable(arr) {
+      console.log("Checking %d", arr);
+      var from = GameState.arr_from(arr);
+      var to = GameState.arr_to(arr);
+      if (to > 8 || from == to) return false; // Create a full arrows list
+
+      var all_arrows = this.arrows_red.concat(this.arrows_blu); // Check the arc is not already drawned
+      // and that the departure and arrival vertices are available
+
+      if (!all_arrows.every(function (a) {
+        if (arr == a) return false;
+        if (from == GameState.arr_from(a)) return false;
+        if (to == GameState.arr_to(a)) return false;
+        return true;
+      })) return false;
+      console.log("Ok %d", arr); // Check that there are no cycles
+
+      var count = 0;
+      var next = to;
+
+      for (var i = 0; i < all_arrows.length; i++) {
+        if (next == GameState.arr_from(all_arrows[i])) {
+          next = GameState.arr_to(all_arrows[i]);
+          count += 1;
+          i = -1;
+
+          if (next == from) {
+            if (count < 8 - 1) return false;
+          }
+        }
+      }
+
+      return true;
+    }
+  }], [{
+    key: "arr_from",
+    value: function arr_from(a) {
+      return a % 8;
+    }
+  }, {
+    key: "arr_to",
+    value: function arr_to(a) {
+      return Math.floor(a / 8);
+    }
+  }, {
+    key: "arr",
+    value: function arr(from, to) {
+      return from + to * 8;
+    }
+  }]);
+
+  return GameState;
+}();
+
+
 
 /***/ }),
 
@@ -2246,33 +2626,108 @@ function SideColumn(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ title)
+/* harmony export */   "default": () => (/* binding */ GameAI)
 /* harmony export */ });
-/* harmony import */ var _inertiajs_inertia_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-react */ "./node_modules/@inertiajs/inertia-react/dist/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GameGraphycs/CentralCanvas */ "./resources/js/GameGraphycs/CentralCanvas.js");
 /* harmony import */ var _GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameGraphycs/SideColumn */ "./resources/js/GameGraphycs/SideColumn.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../GameLogic/GameState */ "./resources/js/GameLogic/GameState.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
 
 
 
-function title(_ref) {
-  var type = _ref.type;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "w-screen h-screen flex flex-row items-stretch",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        side: 1
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "border-solid border-4 border-r-player1 grow "
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        side: 2
-      })]
-    })
-  });
-}
+
+
+
+var GameAI = /*#__PURE__*/function (_Component) {
+  _inherits(GameAI, _Component);
+
+  var _super = _createSuper(GameAI);
+
+  function GameAI() {
+    var _this;
+
+    _classCallCheck(this, GameAI);
+
+    _this = _super.call(this);
+    _this.state = {
+      gamestate: new _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_3__["default"]()
+    };
+    return _this;
+  }
+
+  _createClass(GameAI, [{
+    key: "addArrow",
+    value: function addArrow(arr) {
+      if (this.state.gamestate.drawable(arr)) {
+        this.setState(function (prevState) {
+          prevState.gamestate.add(arr);
+          return prevState.gamestate;
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "w-screen h-screen flex flex-row items-stretch",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            side: 1,
+            active: this.state.gamestate.nextPlayer() == 1
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "grow flex flex-col items-center",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "bg-info",
+              children: "Testo info 1"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              gamestate: this.state.gamestate,
+              addArrow: function addArrow(arr) {
+                return _this2.addArrow(arr);
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "bg-info",
+              children: "Testo info 2"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            side: 2,
+            active: this.state.gamestate.nextPlayer() == 2
+          })]
+        })
+      });
+    }
+  }]);
+
+  return GameAI;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+
+
 
 /***/ }),
 
@@ -2525,6 +2980,26 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/theme.js":
+/*!*******************************!*\
+  !*** ./resources/js/theme.js ***!
+  \*******************************/
+/***/ ((module) => {
+
+module.exports = {
+  colors: {
+    transparent: 'transparent',
+    current: 'currentColor',
+    background: '#FFECD1',
+    player1: '#FF7D00',
+    player2: '#15616D',
+    text: '#78290F',
+    info: '#001524'
+  }
+};
 
 /***/ }),
 
@@ -3269,6 +3744,25 @@ module.exports = function hasSymbols() {
 var bind = __webpack_require__(/*! function-bind */ "./node_modules/function-bind/index.js");
 
 module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
+
+
+/***/ }),
+
+/***/ "./node_modules/linspace/index.js":
+/*!****************************************!*\
+  !*** ./node_modules/linspace/index.js ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var range = __webpack_require__(/*! lodash.range */ "./node_modules/lodash.range/index.js");
+
+module.exports = function linspace(a,b,n) {
+  var every = (b-a)/(n-1),
+      ranged = range(a,b,every);
+
+  return ranged.length == n ? ranged : ranged.concat(b);
+}
+
 
 
 /***/ }),
@@ -5128,6 +5622,506 @@ function stubFalse() {
 }
 
 module.exports = isEqual;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash.range/index.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash.range/index.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0,
+    MAX_SAFE_INTEGER = 9007199254740991,
+    MAX_INTEGER = 1.7976931348623157e+308,
+    NAN = 0 / 0;
+
+/** `Object#toString` result references. */
+var funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    symbolTag = '[object Symbol]';
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * The base implementation of `_.property` without support for deep paths.
+ *
+ * @private
+ * @param {string} key The key of the property to get.
+ * @returns {Function} Returns the new accessor function.
+ */
+function baseProperty(key) {
+  return function(object) {
+    return object == null ? undefined : object[key];
+  };
+}
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeCeil = Math.ceil,
+    nativeMax = Math.max;
+
+/**
+ * The base implementation of `_.range` and `_.rangeRight` which doesn't
+ * coerce arguments.
+ *
+ * @private
+ * @param {number} start The start of the range.
+ * @param {number} end The end of the range.
+ * @param {number} step The value to increment or decrement by.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Array} Returns the range of numbers.
+ */
+function baseRange(start, end, step, fromRight) {
+  var index = -1,
+      length = nativeMax(nativeCeil((end - start) / (step || 1)), 0),
+      result = Array(length);
+
+  while (length--) {
+    result[fromRight ? length : ++index] = start;
+    start += step;
+  }
+  return result;
+}
+
+/**
+ * Creates a `_.range` or `_.rangeRight` function.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new range function.
+ */
+function createRange(fromRight) {
+  return function(start, end, step) {
+    if (step && typeof step != 'number' && isIterateeCall(start, end, step)) {
+      end = step = undefined;
+    }
+    // Ensure the sign of `-0` is preserved.
+    start = toFinite(start);
+    if (end === undefined) {
+      end = start;
+      start = 0;
+    } else {
+      end = toFinite(end);
+    }
+    step = step === undefined ? (start < end ? 1 : -1) : toFinite(step);
+    return baseRange(start, end, step, fromRight);
+  };
+}
+
+/**
+ * Gets the "length" property value of `object`.
+ *
+ * **Note:** This function is used to avoid a
+ * [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792) that affects
+ * Safari on at least iOS 8.1-8.3 ARM64.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {*} Returns the "length" value.
+ */
+var getLength = baseProperty('length');
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return !!length &&
+    (typeof value == 'number' || reIsUint.test(value)) &&
+    (value > -1 && value % 1 == 0 && value < length);
+}
+
+/**
+ * Checks if the given arguments are from an iteratee call.
+ *
+ * @private
+ * @param {*} value The potential iteratee value argument.
+ * @param {*} index The potential iteratee index or key argument.
+ * @param {*} object The potential iteratee object argument.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+ *  else `false`.
+ */
+function isIterateeCall(value, index, object) {
+  if (!isObject(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == 'number'
+        ? (isArrayLike(object) && isIndex(index, object.length))
+        : (type == 'string' && index in object)
+      ) {
+    return eq(object[index], value);
+  }
+  return false;
+}
+
+/**
+ * Performs a
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+ * comparison between two values to determine if they are equivalent.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.eq(object, object);
+ * // => true
+ *
+ * _.eq(object, other);
+ * // => false
+ *
+ * _.eq('a', 'a');
+ * // => true
+ *
+ * _.eq('a', Object('a'));
+ * // => false
+ *
+ * _.eq(NaN, NaN);
+ * // => true
+ */
+function eq(value, other) {
+  return value === other || (value !== value && other !== other);
+}
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(getLength(value)) && !isFunction(value);
+}
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+  var tag = isObject(value) ? objectToString.call(value) : '';
+  return tag == funcTag || tag == genTag;
+}
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This function is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length,
+ *  else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && objectToString.call(value) == symbolTag);
+}
+
+/**
+ * Converts `value` to a finite number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.12.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted number.
+ * @example
+ *
+ * _.toFinite(3.2);
+ * // => 3.2
+ *
+ * _.toFinite(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toFinite(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toFinite('3.2');
+ * // => 3.2
+ */
+function toFinite(value) {
+  if (!value) {
+    return value === 0 ? value : 0;
+  }
+  value = toNumber(value);
+  if (value === INFINITY || value === -INFINITY) {
+    var sign = (value < 0 ? -1 : 1);
+    return sign * MAX_INTEGER;
+  }
+  return value === value ? value : 0;
+}
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = isFunction(value.valueOf) ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+/**
+ * Creates an array of numbers (positive and/or negative) progressing from
+ * `start` up to, but not including, `end`. A step of `-1` is used if a negative
+ * `start` is specified without an `end` or `step`. If `end` is not specified,
+ * it's set to `start` with `start` then set to `0`.
+ *
+ * **Note:** JavaScript follows the IEEE-754 standard for resolving
+ * floating-point values which can produce unexpected results.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {number} [start=0] The start of the range.
+ * @param {number} end The end of the range.
+ * @param {number} [step=1] The value to increment or decrement by.
+ * @returns {Array} Returns the range of numbers.
+ * @see _.inRange, _.rangeRight
+ * @example
+ *
+ * _.range(4);
+ * // => [0, 1, 2, 3]
+ *
+ * _.range(-4);
+ * // => [0, -1, -2, -3]
+ *
+ * _.range(1, 5);
+ * // => [1, 2, 3, 4]
+ *
+ * _.range(0, 20, 5);
+ * // => [0, 5, 10, 15]
+ *
+ * _.range(0, -4, -1);
+ * // => [0, -1, -2, -3]
+ *
+ * _.range(1, 4, 0);
+ * // => [1, 1, 1]
+ *
+ * _.range(0);
+ * // => []
+ */
+var range = createRange();
+
+module.exports = range;
 
 
 /***/ }),

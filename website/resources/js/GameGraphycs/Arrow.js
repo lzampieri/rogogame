@@ -10,9 +10,9 @@ export default function Arrow( props ) {
     useEffect( () => {
         function resizeDetected() {
             setL( maxL > ref.current.offsetWidth ? ref.current.offsetWidth : maxL )
-            console.log( ref.current.offsetWidth )
         }
         window.addEventListener( 'resize', resizeDetected )
+        resizeDetected()
         return () => window.removeEventListener( 'resize', resizeDetected )
     } )
 
