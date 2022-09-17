@@ -193,20 +193,29 @@ string GameState::toString() {
     stringstream ss("");
     ss<<"Rosse: ";
     for( int i = 0; i < arrows_red->size(); i++ )
-        ss << int( arr_from( arrows_red->at( i ) ) ) << "->" << int( arr_to( arrows_red->at( i ) ) ) << "; ";
+        ss << int( arr_from( arrows_red->at( i ) ) ) << "->" << int( arr_to( arrows_red->at( i ) ) ) << " (" << int( arrows_red->at(i) ) << "); ";
     if( arrows_blu->size() > 0 )
         ss << "Blu: ";
     for( int i = 0; i < arrows_blu->size(); i++ )
-        ss << int( arr_from( arrows_blu->at( i ) ) ) << "->" << int( arr_to( arrows_blu->at( i ) ) ) << "; ";
+        ss << int( arr_from( arrows_blu->at( i ) ) ) << "->" << int( arr_to( arrows_blu->at( i ) ) ) << " (" << int( arrows_blu->at(i) ) << "); ";
     return ss.str();
 }
 
+size_t GameStateHasher::maximum = 0;
+
 size_t GameStateHasher::operator() ( const GameState &gs ) const {
     size_t hash = 0;
-    for( short i = 0; i < gs.arrows_red->size(); i++ )
-        hash = hash * gs.N + gs.arrows_red->at(i);
-    hash *= gs.N;
-    for( short i = 0; i < gs.arrows_blu->size(); i++ )
-        hash = hash * gs.N + gs.arrows_blu->at(i);
+    for( short i = 0; i < gs.N / 2; i++ ) {
+        hash *= gs.N * gs.N;
+        if( i < gs.arrows_red->size() )
+            hash += gs.arrows_red->at(i);
+    }
+    for( short i = 0; i < gs.N / 2; i++ ) {
+        hash *= gs.N * gs.N;
+        if( i < gs.arrows_blu->size() )
+            hash += gs.arrows_blu->at(i);
+    }
+    if( hash > maximum )
+        maximum = hash;
     return hash;
 }

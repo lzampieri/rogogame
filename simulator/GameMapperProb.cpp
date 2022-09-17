@@ -9,6 +9,9 @@ GameMapperProb::GameMapperProb( int N, PlayerType redType, PlayerType bluType ) 
     players->insert( pair< GamePlayer, PlayerType>( GamePlayer::Blu, bluType ) );
 
     probs = new unordered_map< GameState, GameProbEsit, GameStateHasher >();
+    possibleMoves = new unordered_map< GameState, vector< arrow >*, GameStateHasher >();
+    gameStatesList = new vector< GameState >();
+    gameStatesList->reserve( 6400000 );
     counts = new vector< int >( N + 1, 0 );
 }
 
@@ -18,13 +21,15 @@ GameMapperProb::~GameMapperProb() {
     delete counts;
 }
 
-GameProbEsit GameMapperProb::get( const GameState gs ) {
+GameProbEsit& GameMapperProb::get( const GameState gs ) {
     if( probs->count( gs ) > 0 ) {
         return probs->at( gs );
     }
     
-    GameProbEsit value = compute( gs );
+    possibleMoves->insert( pair<GameState, vector<arrow>*>( gs, new vector<arrow>()) );
+    GameProbEsit value = compute( gs, possibleMoves->at( gs ) );
     probs->insert( pair<GameState,GameProbEsit>(gs,value) );
+    gameStatesList->push_back( gs );
 
     counts->at( gs.count() ) += 1;
     if( gs.count() < 3 ) {
@@ -33,18 +38,18 @@ GameProbEsit GameMapperProb::get( const GameState gs ) {
         cout<<endl;
     }
 
-    return value;
+    return probs->at( gs );
 }
 
-GameProbEsit GameMapperProb::compute( const GameState gs ) {
+GameProbEsit GameMapperProb::compute( const GameState gs, vector<arrow>* possibleInsertions ) {
     if( gs.ended() )
         return GameProbEsit( gs.winner() );
     if( players->at( gs.nextPlayer() ) == PlayerType::Smart )
-        return computeSmart( gs );
-    else return computeRand( gs );
+        return computeSmart( gs, possibleInsertions );
+    else return computeRand( gs, possibleInsertions );
 }
 
-GameProbEsit GameMapperProb::computeSmart( const GameState gs ) {
+GameProbEsit GameMapperProb::computeSmart( const GameState gs, vector<arrow>* possibleInsertions ) {
     arrow new_arrow;
     double best_win_prob = 0;
     double best_tie_prob = 0;
@@ -58,14 +63,19 @@ GameProbEsit GameMapperProb::computeSmart( const GameState gs ) {
             
             new_arrow = i * N + j;
             if( gs.drawable( new_arrow ) ) {
+                possibleInsertions->push_back( new_arrow );
                 GameProbEsit new_esit = get( gs + new_arrow );
-                if( new_esit.probWin( next ) == 1 )
-                    return new_esit;
+                // if( new_esit.probWin( next ) == 1 )
+                //     return new_esit;
                 if(
                     ( new_esit.probWin( next ) > best_win_prob ) || 
                     ( ( new_esit.probWin( next ) == best_win_prob ) && ( new_esit.probTie() > best_tie_prob ) )
-                )
+                ) {
                     esit = new_esit;
+                    best_win_prob = new_esit.probWin( next );
+                    best_tie_prob = new_esit.probTie();
+                }
+
             }
         }
     }
@@ -73,7 +83,7 @@ GameProbEsit GameMapperProb::computeSmart( const GameState gs ) {
     return esit;
 }
 
-GameProbEsit GameMapperProb::computeRand ( const GameState gs ) {
+GameProbEsit GameMapperProb::computeRand ( const GameState gs, vector<arrow>* possibleInsertions ) {
     arrow new_arrow;
     GameProbEsit esit( 0, 0 );
     int count = 0;
@@ -85,6 +95,7 @@ GameProbEsit GameMapperProb::computeRand ( const GameState gs ) {
             
             new_arrow = i * N + j;
             if( gs.drawable( new_arrow ) ) {
+                possibleInsertions->push_back( new_arrow );
                 esit += get( gs + new_arrow );
                 count += 1;
             }

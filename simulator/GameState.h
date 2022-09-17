@@ -44,6 +44,7 @@ public:
 
 class GameStateHasher {
 public:
+    static size_t maximum;
     size_t operator() ( const GameState &gs ) const;
 };
 

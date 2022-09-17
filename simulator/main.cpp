@@ -1,49 +1,63 @@
 #include <iostream>
-#include <fstream>
-#include <filesystem>
+#include <unordered_map>
 
 #include "GameMapperProb.h"
-#include "date.h"
+#include "DataWriter.h"
 
 using namespace std;
 
 int main() {
     int N = 8;
-    PlayerType redType = PlayerType::Smart;
-    PlayerType bluType = PlayerType::Random;
     GameState gs0( N );
 
     cout<<"Creo gli oggetti usando un reticolo di "<<N<<" vertici;"<<endl;
     cout<<"e partendo dalla situazione: "<<gs0.toString()<<endl;
-    GameMapperProb gmp( N, redType, bluType );
+    GameMapperProb gmp_red( N, PlayerType::Smart, PlayerType::Random );
+    GameMapperProb gmp_blu( N, PlayerType::Random, PlayerType::Smart );
 
-    cout<<"Calcolo l'esito con il giocatore rosso "<<( redType == PlayerType::Smart ? "intelligente" : "casuale")
-        <<" e il giocatore blu "<<( bluType == PlayerType::Smart ? "intelligente" : "casuale")<<endl;
-    GameProbEsit gpe = gmp.get( gs0 );
-    cout<<"Prob. Vittoria rosso: "<<gpe.probWin( GamePlayer::Red )<<"\n"
-        <<"Prob. Pareggio: "<<gpe.probTie()<<"\n"
-        <<"Prob. Vittoria blu: "<<gpe.probWin( GamePlayer::Blu )<<endl;
+    GameProbEsit gpe_red = gmp_red.get( gs0 );
+    GameProbEsit gpe_blu = gmp_blu.get( gs0 );
+
+    cout<<"Rosso furbo, blu scemo\n";
+    cout<<"Prob. Vittoria rosso: "<<gpe_red.probWin( GamePlayer::Red )<<"\n"
+        <<"Prob. Pareggio: "<<gpe_red.probTie()<<"\n"
+        <<"Prob. Vittoria blu: "<<gpe_red.probWin( GamePlayer::Blu )<<endl;
+
+    cout<<"Rosso scemo, blu furbo\n";
+    cout<<"Prob. Vittoria rosso: "<<gpe_blu.probWin( GamePlayer::Red )<<"\n"
+        <<"Prob. Pareggio: "<<gpe_blu.probTie()<<"\n"
+        <<"Prob. Vittoria blu: "<<gpe_blu.probWin( GamePlayer::Blu )<<endl;
+
     cout<<"Finito!"<<endl;
 
-    string filename = "details_" + date::format("%Y%m%d", chrono::system_clock::now());
-    int progressive = 0;
-    while( filesystem::exists( filename + "_" + to_string( progressive ) + ".txt" ) )
-        progressive ++;
-    filename += "_" + to_string( progressive ) + ".txt";
 
-    ofstream out( filename );
-    out<<"Using "<<N<<" vertices\n"
-       <<"Starting by "<<gs0.toString()<<"\n"
-       <<"Red player start"<<"\n"
-       <<"Red player "<<( redType == PlayerType::Smart ? "is smart" : "plays randomly")<<"\n"
-       <<"Blu player "<<( bluType == PlayerType::Smart ? "is smart" : "plays randomly")<<"\n"
-       <<"\nthe final winning probabilities are:\n"
-       <<"Red win: "<<gpe.probWin( GamePlayer::Red )*100<<"%\n"
-       <<"Tie    : "<<gpe.probTie(                 )*100<<"%\n"
-       <<"Blu win: "<<gpe.probWin( GamePlayer::Blu )*100<<"%\n"
-       <<endl;
-    out.close();
 
+    DataWriter writer;
+    GameStateHasher gst;
+
+    cout<<"Going to print "<<gmp_red.possibleMoves->size()<<" rows"<<endl;
+
+    // Mosse che deve fare il rosso
+    for( const GameState& gs : *gmp_red.gameStatesList ) {
+        if( gs.nextPlayer() != GamePlayer::Red ) continue;
+
+        const GameProbEsit& est = gmp_red.get( gs );
+        writer.write_row( gs, gmp_red.possibleMoves->at( gs ), est.probWin( GamePlayer::Red ), est.probTie() );
+    }
+
+    cout<<"Going to print "<<gmp_blu.possibleMoves->size()<<" rows"<<endl;
+    // Mosse che deve fare il blu
+    for( const GameState& gs : *gmp_blu.gameStatesList ) {
+        if( gs.nextPlayer() != GamePlayer::Blu ) continue;
+
+        const GameProbEsit& est = gmp_blu.get( gs );
+        writer.write_row( gs, gmp_blu.possibleMoves->at( gs ), est.probWin( GamePlayer::Blu ), est.probTie() );
+    }
+
+    writer.close();
+
+    cout<<"The maximum hash obtained is " << GameStateHasher::maximum << endl;
+    
     system("PAUSE"); 
 
     return 0;
