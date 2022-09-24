@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/game_ai/{type}', function ($type) {
     return Inertia::render('GameAI', [ 'type' => $type ] );
-})->where('type', '(random|probs|squared_probs|win)')
+})->where('type', '(random|probs|squared_probs|fifth_probs)')
   ->name('game_ai');
 
 Route::get('/NewPage', function () {

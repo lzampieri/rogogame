@@ -65,6 +65,30 @@ export default class GameState {
         return true;
     }
 
+    hash() {
+        let hash = "";
+        this.arrows_red.sort();
+        this.arrows_blu.sort();
+
+        for( let i = 0; i < 8/2; i++ ) {
+            if( i < this.arrows_red.length ) {
+                if( this.arrows_red[i] < 10 ) hash += "0";
+                hash += this.arrows_red[i];
+            } else  {
+                hash += "00";
+            }
+        }
+        for( let i = 0; i < 8/2; i++ ) {
+            if( i < this.arrows_blu.length ) {
+                if( this.arrows_blu[i] < 10 ) hash += "0";
+                hash += this.arrows_blu[i];
+            } else  {
+                hash += "00";
+            }
+        }
+        return hash;
+    }
+
     static arr_from( a ) { return a % 8 }
     static arr_to  ( a ) { return Math.floor( a / 8 ) }
     static arr ( from, to ) { return from + to * 8 }

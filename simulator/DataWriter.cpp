@@ -42,29 +42,62 @@ void DataWriter::close_file() {
     delete current;
 }
 
-void DataWriter::write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob ) {
+void DataWriter::evolved_write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob) {
     if( rows_count >= rows_per_file ) {
         close_file();
         new_file();
     }
     rows_count += 1;
 
-    size_t hash = gsh( gs );
-
-    if( verify ) {
-        if( set->count( hash ) > 0 ) {
-            throw new invalid_argument( "Hash " + to_string(hash) + " already used!" );
+    // Print the state code:
+    for( int i = 0; i < gs.N/2; i++ ) {
+        if( i < gs.arrows_red->size() ) {
+            if( int( gs.arrows_red->at(i) ) < 10 ) (*current) << "0";
+            (*current) << int( gs.arrows_red->at(i) );
         }
-        set->insert( hash );
+        else (*current) << "00";
+    }
+    for( int i = 0; i < gs.N/2; i++ ) {
+        if( i < gs.arrows_blu->size() ) {
+            if( int( gs.arrows_blu->at(i) ) < 10 ) (*current) << "0";
+            (*current) << int( gs.arrows_blu->at(i) );
+        }
+        else (*current) << "00";
     }
 
-    (*current) << hash << ",";
-    
+    (*current) << ',';
+
+    // Print the possible arrows
     for( arrow a : *possible_arrows )
-        (*current) << int(a) << ";";
+        (*current) << int( a ) << ";";
 
     (*current) << "," << win_prob << "," << tie_prob << "\n";
+
 }
+
+// void DataWriter::write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob ) {
+//     if( rows_count >= rows_per_file ) {
+//         close_file();
+//         new_file();
+//     }
+//     rows_count += 1;
+
+//     size_t hash = gsh( gs );
+
+//     if( verify ) {
+//         if( set->count( hash ) > 0 ) {
+//             throw new invalid_argument( "Hash " + to_string(hash) + " already used!" );
+//         }
+//         set->insert( hash );
+//     }
+
+//     (*current) << hash << ",";
+    
+//     for( arrow a : *possible_arrows )
+//         (*current) << int(a) << ";";
+
+//     (*current) << "," << win_prob << "," << tie_prob << "\n";
+// }
 
 void DataWriter::close() {
     close_file();

@@ -9,7 +9,7 @@ class CreateMovesTable extends Migration
     public function up()
     {
         Schema::create('moves', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->string('id',16);
             $table->text('PossibleArrows');
             $table->double('WinProb');
             $table->double('TieProb');

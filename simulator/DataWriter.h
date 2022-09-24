@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include "date.h"
 #include "GameState.h"
+#include "GameMapperProb.h"
 
 class DataWriter {
     std::string basename;
@@ -29,9 +30,10 @@ class DataWriter {
     void new_file();
 
 public:
-    DataWriter( int rows_per_file = 20000, bool verbose = true, bool verify = false );
+    DataWriter( int rows_per_file = 50000, bool verbose = true, bool verify = false );
 
-    void write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob );
+    void evolved_write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob);
+    // void write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob );
 
     void close();
 };

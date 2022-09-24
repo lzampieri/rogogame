@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MovesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,15 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::get(
+    '/move/{type}/{state}',
+    [ MovesController::class, 'get' ]
+    )->where('type', '(random|probs|squared_probs|fifth_probs)')
+    ->name('api_move');
+
+Route::get(
+    '/move_parse/{state}',
+    [ MovesController::class, 'parse' ]
+    )
+    ->name('api_parse');

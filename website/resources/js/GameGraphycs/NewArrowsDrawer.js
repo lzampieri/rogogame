@@ -25,11 +25,13 @@ export default function NewArrowsDrawer( props ) {
     }
 
     function manageOnPointerDown( e ) {
+        if( !props.active ) return;
         const pos = e.target.getStage().getPointerPosition()
         setMouse( pos );
         setFrom( isNear( pos ) )
     }
     function manageOnPointerMove( e ) {
+        if( !props.active ) return;
         if( from > -1 ) {
             const pos = e.target.getStage().getPointerPosition()
             const point = isNear( pos )
@@ -38,6 +40,7 @@ export default function NewArrowsDrawer( props ) {
         }
     }
     function manageOnPointerUp( e ) {
+        if( !props.active ) return;
         const to = isNear( e.target.getStage().getPointerPosition() )
         if( to > -1 ) {
             props.addArrow( GameState.arr( from, to ) )

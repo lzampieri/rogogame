@@ -29,7 +29,7 @@ export default function title() {
                     <Link className="title-page-a" href={route('game_ai',{'type':'random'})}>Facile</Link>
                     <Link className="title-page-a" href={route('game_ai',{'type':'probs'})}>Medio</Link>
                     <Link className="title-page-a" href={route('game_ai',{'type':'squared_probs'})}>Difficile</Link>
-                    <Link className="title-page-a" href={route('game_ai',{'type':'win'})}>Impossibile</Link>
+                    <Link className="title-page-a" href={route('game_ai',{'type':'fifth_probs'})}>Impossibile</Link>
                 </div> )
             }
         </div>

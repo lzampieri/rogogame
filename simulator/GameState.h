@@ -10,6 +10,7 @@
 class GameStateHasher;
 
 class GameState {
+public:
     arrow N;
     std::vector<arrow>* arrows_red;
     std::vector<arrow>* arrows_blu;
@@ -20,7 +21,6 @@ class GameState {
     inline arrow arr_from( const arrow a ) const { return a % N; };
     inline arrow arr_to( const arrow a ) const { return a / N; };
 
-public:
     GameState( const arrow N );
     GameState( const GameState &old_gs );
     ~GameState();

@@ -25,7 +25,9 @@ export default function Arrow( props ) {
     }
 
     return (
-        <div className="w-full flex flex-row justify-center my-4" ref={ref}>
+        <div
+            className={"w-full flex flex-row justify-center my-4 " + ( props.pulsing ? 'animate-pulse' : '' ) }
+            ref={ref}>
             <Stage
                 width={L} height={L}>
                 <Layer>

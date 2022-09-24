@@ -8,7 +8,7 @@ class Move extends Model
 {
     public $timestamps = false;
     public $incrementing = false;
-    protected $keyType = 'bigint';
+    protected $keyType = 'string';
 
     protected $casts = [
         'PossibleArrows' => 'array'
@@ -21,9 +21,3 @@ class Move extends Model
     // TieProb
     // Not mass assignable
 }
-
-
-// $table->id();
-// $table->text('PossibleArrows');
-// $table->double('WinProb');
-// $table->double('TieProb');

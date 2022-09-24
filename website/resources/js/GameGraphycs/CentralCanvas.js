@@ -34,6 +34,7 @@ export default function CentralCanvas( props ) {
                     mid_x={ mid_x } ys={ ys } width={L} height={H}
                     color={ props.gamestate.nextPlayer() == 1 ? theme.colors.player1 : theme.colors.player2 }
                     addArrow={ (arr) => props.addArrow( arr ) }
+                    active={ props.drawingActive }
                     />
             </Stage>
         </div>

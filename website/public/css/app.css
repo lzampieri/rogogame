@@ -617,6 +617,22 @@ body {
 .grow{
   flex-grow: 1;
 }
+@-webkit-keyframes pulse{
+
+  50%{
+    opacity: .5;
+  }
+}
+@keyframes pulse{
+
+  50%{
+    opacity: .5;
+  }
+}
+.animate-pulse{
+  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 .resize{
   resize: both;
 }
@@ -718,6 +734,7 @@ body {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
+
 @media (min-width: 640px){
 
   .sm\:ml-0{
@@ -765,6 +782,7 @@ body {
     text-align: right;
   }
 }
+
 @media (min-width: 768px){
 
   .md\:grid-cols-2{
@@ -788,6 +806,7 @@ body {
     line-height: 1;
   }
 }
+
 @media (min-width: 1024px){
 
   .lg\:px-8{

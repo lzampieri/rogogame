@@ -6,8 +6,12 @@
 
 using namespace std;
 
-int main() {
+int main( int argc, char *argv[] ) {
     int N = 8;
+    if( argc > 1 ) {
+        N = atoi( argv[1] );
+    }
+
     GameState gs0( N );
 
     cout<<"Creo gli oggetti usando un reticolo di "<<N<<" vertici;"<<endl;
@@ -33,30 +37,19 @@ int main() {
 
 
     DataWriter writer;
-    GameStateHasher gst;
 
     cout<<"Going to print "<<gmp_red.possibleMoves->size()<<" rows"<<endl;
 
     // Mosse che deve fare il rosso
     for( const GameState& gs : *gmp_red.gameStatesList ) {
-        if( gs.nextPlayer() != GamePlayer::Red ) continue;
 
-        const GameProbEsit& est = gmp_red.get( gs );
-        writer.write_row( gs, gmp_red.possibleMoves->at( gs ), est.probWin( GamePlayer::Red ), est.probTie() );
-    }
+        GameMapperProb* gmp = ( gs.nextPlayer() == GamePlayer::Red ? &gmp_red : &gmp_blu );
 
-    cout<<"Going to print "<<gmp_blu.possibleMoves->size()<<" rows"<<endl;
-    // Mosse che deve fare il blu
-    for( const GameState& gs : *gmp_blu.gameStatesList ) {
-        if( gs.nextPlayer() != GamePlayer::Blu ) continue;
+        writer.evolved_write_row( gs, gmp->possibleMoves->at( gs ), gmp->get( gs ).probWin( gs.nextPlayer() ), gmp->get( gs ).probTie() );
 
-        const GameProbEsit& est = gmp_blu.get( gs );
-        writer.write_row( gs, gmp_blu.possibleMoves->at( gs ), est.probWin( GamePlayer::Blu ), est.probTie() );
     }
 
     writer.close();
-
-    cout<<"The maximum hash obtained is " << GameStateHasher::maximum << endl;
     
     system("PAUSE"); 
 
