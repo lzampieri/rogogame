@@ -3,6 +3,7 @@
 use App\Http\Controllers\GamesController;
 use App\Http\Controllers\MovesController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,3 +38,8 @@ Route::post(
     [ GamesController::class, 'register' ]
     )
     ->name('api_game_register');
+
+Route::get(
+    '/migrate',
+    function() { Artisan::call('migrate'); }
+);

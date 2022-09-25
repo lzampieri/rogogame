@@ -41,12 +41,12 @@ class MovesSeeder extends Seeder
                 ];
 
                 if( count( $to_insert ) > 5000 ) {
-                    DB::table('moves')->insert($to_insert);
+                    DB::table('strali_moves')->insert($to_insert);
                     $to_insert = [];
                 }
             }
 
-            DB::table('moves')->insert($to_insert);
+            DB::table('strali_moves')->insert($to_insert);
             echo $line . "\n";
         }
 

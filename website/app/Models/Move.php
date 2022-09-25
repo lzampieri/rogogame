@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Move extends Model
 {
+    protected $table = 'strali_moves';
+
     public $timestamps = false;
     public $incrementing = false;
     protected $keyType = 'string';

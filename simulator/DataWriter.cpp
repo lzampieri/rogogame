@@ -15,17 +15,19 @@ DataWriter::DataWriter( int rows_per_file, bool verbose, bool verify )
     (*filelist) << "list\n";
 
     file_count = 0;
-
-    new_file();
+    rows_count = rows_per_file + 1;
 
     if( verify )
         set = new unordered_set< size_t, GameStateHasher >();
+
+    last_state_code = "Error";
+    current = nullptr;
 }
 
-void DataWriter::new_file() {
+void DataWriter::new_file( std::string first_item_hash ) {
     file_count += 1;
-    string the_file = basename + to_string( file_count ) + ".csv";
-    (*filelist) << the_file << '\n';
+    std::string the_file = basename + to_string( file_count ) + ".csv";
+    (*filelist) << the_file << ',' << first_item_hash << ",";
 
     if( verbose )
         cout<<the_file<<endl;
@@ -37,42 +39,52 @@ void DataWriter::new_file() {
 }
 
 void DataWriter::close_file() {
-    current->flush();
-    current->close();
-    delete current;
+    if( current ) {
+        current->flush();
+        current->close();
+        delete current;
+
+        (*filelist) << last_state_code << '\n';
+    }
+}
+
+std::string DataWriter::state_code( const GameState gs ) {
+    stringstream ss("");
+
+    for( int i = 0; i < gs.N/2; i++ ) {
+        if( i < gs.arrows_red->size() ) {
+            if( int( gs.arrows_red->at(i) ) < 10 ) ss << "0";
+            ss << int( gs.arrows_red->at(i) );
+        }
+        else ss << "00";
+    }
+    for( int i = 0; i < gs.N/2; i++ ) {
+        if( i < gs.arrows_blu->size() ) {
+            if( int( gs.arrows_blu->at(i) ) < 10 ) ss << "0";
+            ss << int( gs.arrows_blu->at(i) );
+        }
+        else ss << "00";
+    }
+
+    last_state_code = ss.str();
+    return last_state_code;
 }
 
 void DataWriter::evolved_write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob) {
     if( rows_count >= rows_per_file ) {
         close_file();
-        new_file();
-    }
-    rows_count += 1;
-
-    // Print the state code:
-    for( int i = 0; i < gs.N/2; i++ ) {
-        if( i < gs.arrows_red->size() ) {
-            if( int( gs.arrows_red->at(i) ) < 10 ) (*current) << "0";
-            (*current) << int( gs.arrows_red->at(i) );
-        }
-        else (*current) << "00";
-    }
-    for( int i = 0; i < gs.N/2; i++ ) {
-        if( i < gs.arrows_blu->size() ) {
-            if( int( gs.arrows_blu->at(i) ) < 10 ) (*current) << "0";
-            (*current) << int( gs.arrows_blu->at(i) );
-        }
-        else (*current) << "00";
+        new_file( state_code( gs ) );
     }
 
-    (*current) << ',';
+    (*current) << state_code( gs ) << ',';
 
     // Print the possible arrows
     for( arrow a : *possible_arrows )
         (*current) << int( a ) << ";";
 
     (*current) << "," << win_prob << "," << tie_prob << "\n";
-
+    
+    rows_count += 1;
 }
 
 // void DataWriter::write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob ) {
