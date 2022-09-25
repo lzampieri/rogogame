@@ -19,17 +19,27 @@ export default function title() {
             { page == 1 && 
                 ( <div className="flex flex-col md:flex-row justify-center items-center text-xl pt-4">
                     <a className="title-page-a" onClick={() => setPage(0)}>&lt;</a>
-                    <a className="title-page-a" onClick={() => setPage(11)}>Uomo contro macchina</a>
-                    <a className="title-page-a">Uomo contro uomo</a>
+                    <a className="title-page-a" onClick={() => setPage(12)}>2 giocatori</a>
+                    <a className="title-page-a" onClick={() => setPage(11)}>1 giocatore</a>
+                    <a className="title-page-a" onClick={() => setPage(10)}>0 giocatori</a>
                 </div> )
             }
             { page == 11 && 
                 ( <div className="flex flex-col md:flex-row justify-center items-center text-xl pt-4">
                     <a className="title-page-a" onClick={() => setPage(1)}>&lt;</a>
-                    <Link className="title-page-a" href={route('game_ai',{'type':'random'})}>Facile</Link>
-                    <Link className="title-page-a" href={route('game_ai',{'type':'probs'})}>Medio</Link>
-                    <Link className="title-page-a" href={route('game_ai',{'type':'squared_probs'})}>Difficile</Link>
-                    <Link className="title-page-a" href={route('game_ai',{'type':'fifth_probs'})}>Impossibile</Link>
+                    <Link className="title-page-a" href={route('game_1pl',{'type':'random'})}>Facile</Link>
+                    <Link className="title-page-a" href={route('game_1pl',{'type':'probs'})}>Medio</Link>
+                    <Link className="title-page-a" href={route('game_1pl',{'type':'squared_probs'})}>Difficile</Link>
+                    <Link className="title-page-a" href={route('game_1pl',{'type':'fifth_probs'})}>Impossibile</Link>
+                </div> )
+            }
+            { page == 10 && 
+                ( <div className="flex flex-col md:flex-row justify-center items-center text-xl pt-4">
+                    <a className="title-page-a" onClick={() => setPage(1)}>&lt;</a>
+                    <Link className="title-page-a" href={route('game_0pl',{'type':'random'})}>Facile</Link>
+                    <Link className="title-page-a" href={route('game_0pl',{'type':'probs'})}>Medio</Link>
+                    <Link className="title-page-a" href={route('game_0pl',{'type':'squared_probs'})}>Difficile</Link>
+                    <Link className="title-page-a" href={route('game_0pl',{'type':'fifth_probs'})}>Impossibile</Link>
                 </div> )
             }
         </div>

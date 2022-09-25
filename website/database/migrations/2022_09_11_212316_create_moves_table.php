@@ -11,8 +11,8 @@ class CreateMovesTable extends Migration
         Schema::create('strali_moves', function (Blueprint $table) {
             $table->string('id',16)->primary()->index();
             $table->text('PossibleArrows');
-            $table->double('WinProb');
-            $table->double('TieProb');
+            $table->double('WinProb')->nullable();
+            $table->double('TieProb')->nullable();
         });
     }
 

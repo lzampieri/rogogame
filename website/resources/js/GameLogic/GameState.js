@@ -80,7 +80,7 @@ export default class GameState {
             if( to == GameState.arr_to( a ) ) return false
             return true
         } ) ) return false
-        
+                
         // Check that there are no cycles
         let count = 0
         let next = to
@@ -90,6 +90,7 @@ export default class GameState {
                 count += 1;
                 i = -1;
                 if( next == from ) {
+                    console.log("Il ciclo risulta di: " + count)
                     if( count < 8 - 1 )
                         return false;
                 }

@@ -11,7 +11,7 @@ export default class GameAI extends Component {
     constructor( props ) {
         super( props );
         this.state = {
-            gamestate: new GameState( 0, props.type )
+            gamestate: new GameState( props.num_reals, props.type )
         }
         this.AI = new AI( props.type );
     }

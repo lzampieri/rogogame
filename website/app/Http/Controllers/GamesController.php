@@ -13,7 +13,7 @@ class GamesController extends Controller {
             'blutype'  => 'required|string|min:3|max:16',
             'redpoints'=> 'required|integer',
             'blupoints'=> 'required|integer',
-            'final_state'=> 'required|string|exists:moves,id'
+            'final_state'=> 'required|string|exists:strali_moves,id'
         ]);
 
         return Game::create( $validated );

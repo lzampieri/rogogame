@@ -18,11 +18,11 @@ class CreateGamesTable extends Migration
             $table->timestamps();
             $table->string('redtype', 16);
             $table->string('blutype', 16);
-            $table->smallInteger('redpoints');
-            $table->smallInteger('blupoints');
+            $table->smallInteger('redpoints')->nullable();
+            $table->smallInteger('blupoints')->nullable();
             $table->string('final_state',16);
 
-            $table->foreign('final_state')->references('id')->on('moves');
+            $table->foreign('final_state')->references('id')->on('strali_moves');
         });
     }
 

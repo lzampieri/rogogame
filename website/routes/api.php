@@ -43,3 +43,7 @@ Route::get(
     '/migrate',
     function() { Artisan::call('migrate'); }
 );
+Route::get(
+    '/migrate_refresh',
+    function() { Artisan::call('migrate:refresh'); }
+);

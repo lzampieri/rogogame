@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DataInsertionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,19 +19,16 @@ Route::get('/', function () {
     return Inertia::render('TitlePage');
 });
 
-Route::get('/game_ai/{type}', function ($type) {
-    return Inertia::render('GameAI', [ 'type' => $type ] );
+Route::get('/game_1pl/{type}', function ($type) {
+    return Inertia::render('GameAI', [ 'num_reals' => 1, 'type' => $type ] );
 })->where('type', '(random|probs|squared_probs|fifth_probs)')
-  ->name('game_ai');
+  ->name('game_1pl');
 
-Route::get('/NewPage', function () {
-    return Inertia::render('NewPage');
-})->name('new_page');
+Route::get('/game_0pl/{type}', function ($type) {
+    return Inertia::render('GameAI', [ 'num_reals' => 0, 'type' => $type ] );
+})->where('type', '(random|probs|squared_probs|fifth_probs)')
+  ->name('game_0pl');
 
-Route::get('/NewPageTwo', function () {
-    return Inertia::render('NewPageTwo');
-})->name('new_page_two');
-
-Route::get('/NewPageThree', function () {
-    return Inertia::render('NewPageTwo');
-})->name('new_page_three');
+Route::get('/data_insertion', [ DataInsertionController::class, 'interface' ] )->name('data_insertion');
+Route::get('/data_insertion/{filename}', [ DataInsertionController::class, 'load' ] )->name('data_insertion.load');
+Route::get('/data_insertion_truncate', [ DataInsertionController::class, 'truncate' ] )->name('data_insertion.truncate');
