@@ -32,7 +32,7 @@ export default function CentralCanvas( props ) {
                 <StateOfGame mid_x={ mid_x } ys={ ys } gamestate={ props.gamestate } />
                 <NewArrowsDrawer
                     mid_x={ mid_x } ys={ ys } width={L} height={H}
-                    color={ props.gamestate.nextPlayer() == 1 ? theme.colors.player1 : theme.colors.player2 }
+                    color={ props.gamestate.nextPlayer() == 1 ? theme.colors.player1.parque : theme.colors.player2.parque }
                     addArrow={ (arr) => props.addArrow( arr ) }
                     active={ props.drawingActive }
                     />

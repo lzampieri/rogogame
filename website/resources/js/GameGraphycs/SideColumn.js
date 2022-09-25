@@ -1,4 +1,5 @@
 import { useState } from "react";
+import theme from "../theme";
 import Arrow from "./Arrow";
 
 
@@ -21,8 +22,8 @@ export default function SideColumn( props ) {
                 { contenuto }
             </span>
             <Arrow
-                color={ props.side == 1 ? 'red' : 'blue' }
-                direction={ props.side == 1 ? 'up' : 'down' }
+                color={ props.side == 1 ? theme.colors.player1.main : theme.colors.player2.main }
+                direction={ props.side == 1 ? 'down' : 'up' }
                 active={ props.active }
                 pulsing={ props.active && props.ai } />
         </div>

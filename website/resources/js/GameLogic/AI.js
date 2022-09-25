@@ -6,10 +6,9 @@ export default class AI {
 
         this.running = true;
         let api_url = route( 'api_move', {'type': type, 'state': current_gamestate.hash()} )
-        console.log( api_url );
         let response = await fetch( api_url );
         let move = parseInt( await response.text() );
-        console.log( "Performing " + move );
+        console.log( "AI performing " + move );
         this.running = false;
 
         callback( move );

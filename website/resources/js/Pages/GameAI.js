@@ -27,7 +27,7 @@ export default class GameAI extends Component {
 
     resetGame( ) {
         let newState = this.state.gamestate;
-        newState.resetGame();
+        newState.resetGame( 0 );
         this.setState( { gamestate: newState } );
     }
 
@@ -65,7 +65,7 @@ export default class GameAI extends Component {
                 <SideColumn side={2} active={this.state.gamestate.nextPlayer() == BluPlayer} ai={this.state.gamestate.type_blu == AIPlayer} />
             </div>
             <EndedBanner
-                gameState={this.state.gamestate} resetCallback={() => resetGame()}
+                gameState={this.state.gamestate} resetCallback={() => this.resetGame()}
                 
             />
         </>)

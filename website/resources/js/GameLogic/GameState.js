@@ -6,6 +6,8 @@ export default class GameState {
     type_red;
     type_blu;
 
+    cached_results;
+
     constructor( how_many_real ) {
         this.resetGame( how_many_real );
     }
@@ -25,6 +27,8 @@ export default class GameState {
             this.type_red = RealPlayer;
             this.type_blu = RealPlayer;
         }
+
+        this.cached_results = null;
     }
 
     nextPlayer() {
@@ -98,9 +102,6 @@ export default class GameState {
         this.arrows_red.sort((a,b)=>a-b);
         this.arrows_blu.sort((a,b)=>a-b);
 
-        console.log( this.arrows_red )
-        console.log( this.arrows_blu )
-
         for( let i = 0; i < 8/2; i++ ) {
             if( i < this.arrows_red.length ) {
                 if( this.arrows_red[i] < 10 ) hash += "0";
@@ -118,6 +119,122 @@ export default class GameState {
             }
         }
         return hash;
+    }
+
+    results() {
+        if( !this.ended() ) return null;
+        if( this.cached_results ) return this.cached_results; // If results are already computed, send them back
+        
+        let points_red = 0;
+        let points_blu = 0;
+
+        let double_arrows_red = [];
+        let double_arrows_blu = [];
+
+        let all_arrows = this.arrows_red.concat( this.arrows_blu )
+        
+        // Check for double arrows in the same direction
+        for( let i = 0; i < all_arrows.length; i++ ) {
+            let from = GameState.arr_from ( all_arrows[i] );
+            let to   = GameState.arr_to  ( all_arrows[i] );
+
+            for( let j = 0; j < all_arrows.length; j++ ) {
+                if( j == i )
+                    continue;
+                if( GameState.arr_from( all_arrows[j] ) == to ) {
+                    // console.log( "Have a subsequent" );
+                    if( ( from < to ) && ( to < GameState.arr_to( all_arrows[j] ) ) ) {
+                        points_red += 1;
+                        double_arrows_red.push( to );
+                    }
+                    if( ( from > to ) && ( to > GameState.arr_to( all_arrows[j] ) ) ) {
+                        points_blu += 1;
+                        double_arrows_blu.push( to );
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Check for double occupied spaces
+        // Red player
+        let occupied_up = new Array( 8 - 1 );
+        let occupied_dw = new Array( 8 - 1 );
+        for (let i=0; i < 8 - 1; i++ ) occupied_up[i] = 0;
+        for (let i=0; i < 8 - 1; i++ ) occupied_dw[i] = 0;
+        
+        let double_crossing_red = new Array( 8 - 1 );
+        for (let i=0; i < 8 - 1; i++ ) double_crossing_red[i] = 0;
+
+        for( let i = 0; i < this.arrows_red.length; i++ ) {
+            let from = GameState.arr_from( this.arrows_red[ i ] );
+            let to   = GameState.arr_to  ( this.arrows_red[ i ] );
+            let dir  = 1;
+
+            if( from > to ) {
+                [ from, to ] = [ to, from ];
+                dir *= -1;
+            }
+
+            for( let j = from; j < to; j++ ) {
+                if( dir > 0 )
+                    occupied_up[ j ] += 1;
+                else 
+                    occupied_dw[ j ] += 1;
+            }
+        }
+        for( let i = 0; i < 8 - 1; i ++ ) {
+            double_crossing_red[ i ] = Math.min( occupied_up[ i ], occupied_dw[ i ] );
+            points_red += double_crossing_red[ i ];
+        }
+
+        // Blu player
+        for (let i=0; i < 8 - 1; i++ ) occupied_up[i] = 0;
+        for (let i=0; i < 8 - 1; i++ ) occupied_dw[i] = 0;
+        
+        let double_crossing_blu = new Array( 8 - 1 );
+        for (let i=0; i < 8 - 1; i++ ) double_crossing_blu[i] = 0;
+
+        for( let i = 0; i < this.arrows_blu.length; i++ ) {
+            let from = GameState.arr_from( this.arrows_blu[ i ] );
+            let to   = GameState.arr_to  ( this.arrows_blu[ i ] );
+            let dir  = 1;
+
+            if( from > to ) {
+                [ from, to ] = [ to, from ];
+                dir *= -1;
+            }
+
+            for( let j = from; j < to; j++ ) {
+                if( dir > 0 )
+                    occupied_up[ j ] += 1;
+                else 
+                    occupied_dw[ j ] += 1;
+            }
+        }
+        for( let i = 0; i < 8 - 1; i ++ ) {
+            double_crossing_blu[ i ] = Math.min( occupied_up[ i ], occupied_dw[ i ] );
+            points_blu += double_crossing_blu[ i ];
+        }
+
+        let winner = None;
+
+        if( points_red > points_blu )
+            winner = RedPlayer;
+        if( points_blu > points_red )
+            winner = BluPlayer;
+
+        this.cached_results = {
+            points_red: points_red,
+            points_blu: points_blu,
+            double_arrows_red: double_arrows_red,
+            double_arrows_blu: double_arrows_blu,
+            double_crossing_red: double_crossing_red,
+            double_crossing_blu: double_crossing_blu,
+            winner: winner
+        }
+
+        return this.cached_results;
     }
 
     static arr_from( a ) { return a % 8 }

@@ -2265,7 +2265,7 @@ function CentralCanvas(props) {
         ys: ys,
         width: L,
         height: H,
-        color: props.gamestate.nextPlayer() == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_2___default().colors.player1) : (_theme__WEBPACK_IMPORTED_MODULE_2___default().colors.player2),
+        color: props.gamestate.nextPlayer() == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_2___default().colors.player1.parque) : (_theme__WEBPACK_IMPORTED_MODULE_2___default().colors.player2.parque),
         addArrow: function addArrow(arr) {
           return props.addArrow(arr);
         },
@@ -2308,6 +2308,94 @@ function Connect(props) {
 
 /***/ }),
 
+/***/ "./resources/js/GameGraphycs/DoubleArrowSignal.js":
+/*!********************************************************!*\
+  !*** ./resources/js/GameGraphycs/DoubleArrowSignal.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DoubleArrowSignal)
+/* harmony export */ });
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+function DoubleArrowSignal(props) {
+  var measure = (props.ys[1] - props.ys[0]) / 10;
+  var polys = {
+    x: props.x + 4 * measure * (props.player == 1 ? 1 : -1),
+    y: props.ys[props.node],
+    radius: 2.5 * measure,
+    rotation: props.player == 1 ? 30 : -30
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_0__.RegularPolygon, _objectSpread(_objectSpread({}, polys), {}, {
+    sides: 3,
+    fill: props.player == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1.main) : (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2.main)
+  }));
+}
+
+/***/ }),
+
+/***/ "./resources/js/GameGraphycs/DoubleCrossingSignal.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/GameGraphycs/DoubleCrossingSignal.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DoubleCrossingSignal)
+/* harmony export */ });
+/* harmony import */ var react_konva__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-konva */ "./node_modules/react-konva/es/ReactKonva.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+function DoubleCrossingSignal(props) {
+  if (props.count == 0) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {});
+  var measure = (props.ys[1] - props.ys[0]) * (props.player == 1 ? -1 : +1);
+  var y = (props.ys[props.space] + props.ys[props.space + 1]) / 2;
+
+  var points = function points(i) {
+    return [props.x + measure * 3.2 + measure * 0.25 * i, y, props.x + measure * 3.4 + measure * 0.25 * i, y, props.x + measure * 3.3 + measure * 0.25 * i, y, props.x + measure * 3.3 + measure * 0.25 * i, y + measure * 0.1, props.x + measure * 3.3 + measure * 0.25 * i, y - measure * 0.1];
+  };
+
+  var iterate_on = new Array(props.count);
+
+  for (var i = 0; i < props.count; i++) {
+    iterate_on[i] = 1;
+  }
+
+  console.log(points(0));
+  console.log(points(0));
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+    children: iterate_on.map(function (el, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Line, {
+        points: points(i),
+        stroke: props.player == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1.main) : (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2.main)
+      }, i);
+    })
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/GameGraphycs/EndedBanner.js":
 /*!**************************************************!*\
   !*** ./resources/js/GameGraphycs/EndedBanner.js ***!
@@ -2321,11 +2409,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
+
 function EndedBanner(props) {
   if (!props.gameState.ended()) return null;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: "absolute w-full top-0 text-center",
-    children: "Gioco terminato!"
+    className: "absolute w-full top-0 flex flex-row justify-center",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+      className: "border-solid border-4 border-info rounded-2xl flex flex-col items-center m-2 px-8 py-2",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+        className: "text-3xl font-bold",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+          className: "text-player1-main",
+          children: props.gameState.results().points_red
+        }), "-", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+          className: "text-player2-main",
+          children: props.gameState.results().points_blu
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+        onClick: props.resetCallback,
+        className: "underline cursor-pointer",
+        children: "Reset"
+      })]
+    })
   });
 }
 
@@ -2470,8 +2575,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ SideColumn)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _Arrow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Arrow */ "./resources/js/GameGraphycs/Arrow.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Arrow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Arrow */ "./resources/js/GameGraphycs/Arrow.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
@@ -2483,15 +2591,15 @@ function SideColumn(props) {
     if (props.ai) contenuto = "Ragionando...";else contenuto = "È il turno del giocatore " + (props.side == 1 ? 'rosso' : 'blu');
   }
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
     className: "\r w-1/5\r flex flex-col justify-between items-center\r ",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
       children: props.ai ? "AI" : "Reale"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
       children: contenuto
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Arrow__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      color: props.side == 1 ? 'red' : 'blue',
-      direction: props.side == 1 ? 'up' : 'down',
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Arrow__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      color: props.side == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1.main) : (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2.main),
+      direction: props.side == 1 ? 'down' : 'up',
       active: props.active,
       pulsing: props.active && props.ai
     })]
@@ -2515,36 +2623,80 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../theme */ "./resources/js/theme.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_theme__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Connect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Connect */ "./resources/js/GameGraphycs/Connect.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _DoubleArrowSignal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DoubleArrowSignal */ "./resources/js/GameGraphycs/DoubleArrowSignal.js");
+/* harmony import */ var _DoubleCrossingSignal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DoubleCrossingSignal */ "./resources/js/GameGraphycs/DoubleCrossingSignal.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
 
 
 
 
 
 function StateOfGame(props) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Layer, {
+  var results = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {});
+
+  if (props.gamestate.ended()) {
+    var outcome = props.gamestate.results();
+    results = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+      children: [outcome.double_arrows_red.map(function (a) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DoubleArrowSignal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          node: a,
+          player: 1,
+          x: props.mid_x,
+          ys: props.ys
+        }, 100 + a);
+      }), outcome.double_arrows_blu.map(function (a) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DoubleArrowSignal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          node: a,
+          player: 2,
+          x: props.mid_x,
+          ys: props.ys
+        }, 200 + a);
+      }), outcome.double_crossing_red.map(function (c, i) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DoubleCrossingSignal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          space: i,
+          count: c,
+          player: 1,
+          x: props.mid_x,
+          ys: props.ys
+        }, 300 + i);
+      }), outcome.double_crossing_blu.map(function (c, i) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DoubleCrossingSignal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          space: i,
+          count: c,
+          player: 2,
+          x: props.mid_x,
+          ys: props.ys
+        }, 400 + i);
+      })]
+    });
+  }
+
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Layer, {
     children: [props.ys.map(function (y, i) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Circle, {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_konva__WEBPACK_IMPORTED_MODULE_0__.Circle, {
         x: props.mid_x,
         y: y,
         radius: 5,
         fill: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.text)
       }, i);
     }), props.gamestate.arrows_red.map(function (a) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Connect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Connect__WEBPACK_IMPORTED_MODULE_2__["default"], {
         arrow: a,
-        color: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1),
+        color: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1.parque),
         x: props.mid_x,
         ys: props.ys
       }, a);
     }), props.gamestate.arrows_blu.map(function (a) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Connect__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Connect__WEBPACK_IMPORTED_MODULE_2__["default"], {
         arrow: a,
-        color: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2),
+        color: (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2.parque),
         x: props.mid_x,
         ys: props.ys
       }, a);
-    })]
+    }), results]
   });
 }
 
@@ -2602,24 +2754,23 @@ var AI = /*#__PURE__*/function () {
                   'type': type,
                   'state': current_gamestate.hash()
                 });
-                console.log(api_url);
-                _context.next = 7;
+                _context.next = 6;
                 return fetch(api_url);
 
-              case 7:
+              case 6:
                 response = _context.sent;
                 _context.t0 = parseInt;
-                _context.next = 11;
+                _context.next = 10;
                 return response.text();
 
-              case 11:
+              case 10:
                 _context.t1 = _context.sent;
                 move = (0, _context.t0)(_context.t1);
-                console.log("Performing " + move);
+                console.log("AI performing " + move);
                 this.running = false;
                 callback(move);
 
-              case 16:
+              case 15:
               case "end":
                 return _context.stop();
             }
@@ -2699,6 +2850,8 @@ var GameState = /*#__PURE__*/function () {
 
     _defineProperty(this, "type_blu", void 0);
 
+    _defineProperty(this, "cached_results", void 0);
+
     this.resetGame(how_many_real);
   }
 
@@ -2718,6 +2871,8 @@ var GameState = /*#__PURE__*/function () {
         this.type_red = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RealPlayer;
         this.type_blu = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RealPlayer;
       }
+
+      this.cached_results = null;
     }
   }, {
     key: "nextPlayer",
@@ -2788,8 +2943,6 @@ var GameState = /*#__PURE__*/function () {
       this.arrows_blu.sort(function (a, b) {
         return a - b;
       });
-      console.log(this.arrows_red);
-      console.log(this.arrows_blu);
 
       for (var i = 0; i < 8 / 2; i++) {
         if (i < this.arrows_red.length) {
@@ -2810,6 +2963,138 @@ var GameState = /*#__PURE__*/function () {
       }
 
       return hash;
+    }
+  }, {
+    key: "results",
+    value: function results() {
+      if (!this.ended()) return null;
+      if (this.cached_results) return this.cached_results; // If results are already computed, send them back
+
+      var points_red = 0;
+      var points_blu = 0;
+      var double_arrows_red = [];
+      var double_arrows_blu = [];
+      var all_arrows = this.arrows_red.concat(this.arrows_blu); // Check for double arrows in the same direction
+
+      for (var i = 0; i < all_arrows.length; i++) {
+        var from = GameState.arr_from(all_arrows[i]);
+        var to = GameState.arr_to(all_arrows[i]);
+
+        for (var j = 0; j < all_arrows.length; j++) {
+          if (j == i) continue;
+
+          if (GameState.arr_from(all_arrows[j]) == to) {
+            // console.log( "Have a subsequent" );
+            if (from < to && to < GameState.arr_to(all_arrows[j])) {
+              points_red += 1;
+              double_arrows_red.push(to);
+            }
+
+            if (from > to && to > GameState.arr_to(all_arrows[j])) {
+              points_blu += 1;
+              double_arrows_blu.push(to);
+            }
+
+            break;
+          }
+        }
+      } // Check for double occupied spaces
+      // Red player
+
+
+      var occupied_up = new Array(8 - 1);
+      var occupied_dw = new Array(8 - 1);
+
+      for (var _i2 = 0; _i2 < 8 - 1; _i2++) {
+        occupied_up[_i2] = 0;
+      }
+
+      for (var _i3 = 0; _i3 < 8 - 1; _i3++) {
+        occupied_dw[_i3] = 0;
+      }
+
+      var double_crossing_red = new Array(8 - 1);
+
+      for (var _i4 = 0; _i4 < 8 - 1; _i4++) {
+        double_crossing_red[_i4] = 0;
+      }
+
+      for (var _i5 = 0; _i5 < this.arrows_red.length; _i5++) {
+        var _from = GameState.arr_from(this.arrows_red[_i5]);
+
+        var _to = GameState.arr_to(this.arrows_red[_i5]);
+
+        var dir = 1;
+
+        if (_from > _to) {
+          var _ref = [_to, _from];
+          _from = _ref[0];
+          _to = _ref[1];
+          dir *= -1;
+        }
+
+        for (var _j = _from; _j < _to; _j++) {
+          if (dir > 0) occupied_up[_j] += 1;else occupied_dw[_j] += 1;
+        }
+      }
+
+      for (var _i6 = 0; _i6 < 8 - 1; _i6++) {
+        double_crossing_red[_i6] = Math.min(occupied_up[_i6], occupied_dw[_i6]);
+        points_red += double_crossing_red[_i6];
+      } // Blu player
+
+
+      for (var _i7 = 0; _i7 < 8 - 1; _i7++) {
+        occupied_up[_i7] = 0;
+      }
+
+      for (var _i8 = 0; _i8 < 8 - 1; _i8++) {
+        occupied_dw[_i8] = 0;
+      }
+
+      var double_crossing_blu = new Array(8 - 1);
+
+      for (var _i9 = 0; _i9 < 8 - 1; _i9++) {
+        double_crossing_blu[_i9] = 0;
+      }
+
+      for (var _i10 = 0; _i10 < this.arrows_blu.length; _i10++) {
+        var _from2 = GameState.arr_from(this.arrows_blu[_i10]);
+
+        var _to2 = GameState.arr_to(this.arrows_blu[_i10]);
+
+        var _dir = 1;
+
+        if (_from2 > _to2) {
+          var _ref2 = [_to2, _from2];
+          _from2 = _ref2[0];
+          _to2 = _ref2[1];
+          _dir *= -1;
+        }
+
+        for (var _j2 = _from2; _j2 < _to2; _j2++) {
+          if (_dir > 0) occupied_up[_j2] += 1;else occupied_dw[_j2] += 1;
+        }
+      }
+
+      for (var _i11 = 0; _i11 < 8 - 1; _i11++) {
+        double_crossing_blu[_i11] = Math.min(occupied_up[_i11], occupied_dw[_i11]);
+        points_blu += double_crossing_blu[_i11];
+      }
+
+      var winner = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.None;
+      if (points_red > points_blu) winner = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RedPlayer;
+      if (points_blu > points_red) winner = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.BluPlayer;
+      this.cached_results = {
+        points_red: points_red,
+        points_blu: points_blu,
+        double_arrows_red: double_arrows_red,
+        double_arrows_blu: double_arrows_blu,
+        double_crossing_red: double_crossing_red,
+        double_crossing_blu: double_crossing_blu,
+        winner: winner
+      };
+      return this.cached_results;
     }
   }], [{
     key: "arr_from",
@@ -2920,7 +3205,7 @@ var GameAI = /*#__PURE__*/function (_Component) {
     key: "resetGame",
     value: function resetGame() {
       var newState = this.state.gamestate;
-      newState.resetGame();
+      newState.resetGame(0);
       this.setState({
         gamestate: newState
       });
@@ -2980,7 +3265,7 @@ var GameAI = /*#__PURE__*/function (_Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_EndedBanner__WEBPACK_IMPORTED_MODULE_2__["default"], {
           gameState: this.state.gamestate,
           resetCallback: function resetCallback() {
-            return resetGame();
+            return _this3.resetGame();
           }
         })]
       });
@@ -3257,8 +3542,14 @@ module.exports = {
     transparent: 'transparent',
     current: 'currentColor',
     background: '#FFECD1',
-    player1: '#FF7D00',
-    player2: '#15616D',
+    player1: {
+      main: '#FF0404',
+      parque: '#FF7D00'
+    },
+    player2: {
+      main: '#0202FE',
+      parque: '#15616D'
+    },
     text: '#78290F',
     info: '#001524',
     info_contrast: '#006EBD'
