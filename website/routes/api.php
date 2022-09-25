@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GamesController;
 use App\Http\Controllers\MovesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,9 @@ Route::get(
     [ MovesController::class, 'parse' ]
     )
     ->name('api_parse');
+
+Route::post(
+    '/game/register',
+    [ GamesController::class, 'register' ]
+    )
+    ->name('api_game_register');

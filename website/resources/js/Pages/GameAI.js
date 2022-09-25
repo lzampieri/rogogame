@@ -11,9 +11,9 @@ export default class GameAI extends Component {
     constructor( props ) {
         super( props );
         this.state = {
-            gamestate: new GameState( 0 )
+            gamestate: new GameState( 0, props.type )
         }
-        this.AI = new AI();
+        this.AI = new AI( props.type );
     }
 
     addArrow( arr ) {
@@ -34,7 +34,7 @@ export default class GameAI extends Component {
     checkForAI( state ) {
         if( this.state.gamestate.ended() ) return;
         if( this.state.gamestate.nextPlayerType() == AIPlayer ) {
-            this.AI.get( this.props.type, state, ( arr ) => this.addArrow( arr ) );     
+            this.AI.get( state, ( arr ) => this.addArrow( arr ) );     
         }
     }
 

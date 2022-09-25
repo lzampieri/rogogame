@@ -6,9 +6,12 @@ export default class GameState {
     type_red;
     type_blu;
 
+    ai_type;
+
     cached_results;
 
-    constructor( how_many_real ) {
+    constructor( how_many_real, ai_type ) {
+        this.ai_type = ai_type;
         this.resetGame( how_many_real );
     }
 
@@ -46,6 +49,7 @@ export default class GameState {
     }
 
     add( arr ) {
+        console.log( "Performing %d", arr )
         if( this.arrows_blu.length < this.arrows_red.length )
             this.arrows_blu.push( arr )
         else
@@ -76,8 +80,6 @@ export default class GameState {
             if( to == GameState.arr_to( a ) ) return false
             return true
         } ) ) return false
-
-        console.log( "Ok %d", arr )
         
         // Check that there are no cycles
         let count = 0
@@ -142,7 +144,6 @@ export default class GameState {
                 if( j == i )
                     continue;
                 if( GameState.arr_from( all_arrows[j] ) == to ) {
-                    // console.log( "Have a subsequent" );
                     if( ( from < to ) && ( to < GameState.arr_to( all_arrows[j] ) ) ) {
                         points_red += 1;
                         double_arrows_red.push( to );
@@ -234,7 +235,19 @@ export default class GameState {
             winner: winner
         }
 
+        this.save_match( this.cached_results );
+
         return this.cached_results;
+    }
+
+    async save_match( results ) {
+        await $.post( route( 'api_game_register' ), {
+            redtype: ( this.type_red == RealPlayer ? 'real' : this.ai_type ),
+            blutype: ( this.type_blu == RealPlayer ? 'real' : this.ai_type ),
+            redpoints: results.points_red,
+            blupoints: results.points_blu,
+            final_state: this.hash()
+        } );
     }
 
     static arr_from( a ) { return a % 8 }

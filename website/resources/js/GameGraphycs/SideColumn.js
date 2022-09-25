@@ -21,7 +21,7 @@ export default function SideColumn( props ) {
             w-1/5
             flex flex-col justify-between items-center
             ">
-            <span class="mt-2 text-4xl">
+            <span className="mt-2 text-4xl">
                 <FontAwesomeIcon icon={ props.ai ? faMicrochip : faBrain } />
             </span>
             <span>

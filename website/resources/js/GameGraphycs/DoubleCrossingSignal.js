@@ -16,9 +16,6 @@ export default function DoubleCrossingSignal( props ) {
     let iterate_on = new Array( props.count );
     for( let i = 0; i < props.count; i++ ) iterate_on[i] = 1;
 
-    console.log( points( 0 ) )
-    console.log( points( 0 ) )
-    
     return (
         <>
         {

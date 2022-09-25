@@ -20,4 +20,8 @@ class Move extends Model
     // WinProb
     // TieProb
     // Not mass assignable
+
+    public function games() {
+        return $this->hasMany( Game::class, 'final_state' );
+    }
 }
