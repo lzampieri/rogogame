@@ -2421,7 +2421,7 @@ function EndedBanner(props) {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
           className: "text-player1-main",
           children: props.gameState.results().points_red
-        }), "-", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+        }), "\xA0\xA0-\xA0\xA0", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
           className: "text-player2-main",
           children: props.gameState.results().points_blu
         })]
@@ -2591,6 +2591,7 @@ function SideColumn(props) {
     if (props.ai) contenuto = "Ragionando...";else contenuto = "È il turno del giocatore " + (props.side == 1 ? 'rosso' : 'blu');
   }
 
+  if (props.winner) contenuto = "Vincitore!";
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
     className: "\r w-1/5\r flex flex-col justify-between items-center\r ",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
@@ -2600,7 +2601,7 @@ function SideColumn(props) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Arrow__WEBPACK_IMPORTED_MODULE_2__["default"], {
       color: props.side == 1 ? (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player1.main) : (_theme__WEBPACK_IMPORTED_MODULE_1___default().colors.player2.main),
       direction: props.side == 1 ? 'down' : 'up',
-      active: props.active,
+      active: props.active || props.winner,
       pulsing: props.active && props.ai
     })]
   });
@@ -3244,7 +3245,8 @@ var GameAI = /*#__PURE__*/function (_Component) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__["default"], {
             side: 1,
             active: this.state.gamestate.nextPlayer() == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.RedPlayer,
-            ai: this.state.gamestate.type_red == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer
+            ai: this.state.gamestate.type_red == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer,
+            winner: this.state.gamestate.ended() && this.state.gamestate.results().winner == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.RedPlayer
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "grow flex flex-col items-center",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -3260,7 +3262,8 @@ var GameAI = /*#__PURE__*/function (_Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__["default"], {
             side: 2,
             active: this.state.gamestate.nextPlayer() == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.BluPlayer,
-            ai: this.state.gamestate.type_blu == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer
+            ai: this.state.gamestate.type_blu == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer,
+            winner: this.state.gamestate.ended() && this.state.gamestate.results().winner == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.BluPlayer
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_EndedBanner__WEBPACK_IMPORTED_MODULE_2__["default"], {
           gameState: this.state.gamestate,

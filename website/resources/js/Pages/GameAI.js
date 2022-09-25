@@ -49,7 +49,7 @@ export default class GameAI extends Component {
     render() {
         return (<>
             <div className="w-screen h-screen flex flex-row items-stretch">
-                <SideColumn side={1} active={this.state.gamestate.nextPlayer() == RedPlayer} ai={this.state.gamestate.type_red == AIPlayer} />
+                <SideColumn side={1} active={this.state.gamestate.nextPlayer() == RedPlayer} ai={this.state.gamestate.type_red == AIPlayer} winner={this.state.gamestate.ended() && this.state.gamestate.results().winner == RedPlayer} />
                 
                 <div className="grow flex flex-col items-center">
                     <CentralCanvas
@@ -62,7 +62,7 @@ export default class GameAI extends Component {
                     </div>
                 </div>
                 
-                <SideColumn side={2} active={this.state.gamestate.nextPlayer() == BluPlayer} ai={this.state.gamestate.type_blu == AIPlayer} />
+                <SideColumn side={2} active={this.state.gamestate.nextPlayer() == BluPlayer} ai={this.state.gamestate.type_blu == AIPlayer} winner={this.state.gamestate.ended() && this.state.gamestate.results().winner == BluPlayer} />
             </div>
             <EndedBanner
                 gameState={this.state.gamestate} resetCallback={() => this.resetGame()}
