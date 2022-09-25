@@ -538,11 +538,11 @@ body {
 .right-0{
   right: 0px;
 }
-.m-1{
-  margin: 0.25rem;
-}
 .m-2{
   margin: 0.5rem;
+}
+.m-1{
+  margin: 0.25rem;
 }
 .mx-auto{
   margin-left: auto;
@@ -643,24 +643,6 @@ body {
   -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
           animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-@-webkit-keyframes ping{
-
-  75%, 100%{
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-@keyframes ping{
-
-  75%, 100%{
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-.animate-ping{
-  -webkit-animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-          animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
 .cursor-pointer{
   cursor: pointer;
 }
@@ -694,17 +676,11 @@ body {
 .rounded-lg{
   border-radius: 0.5rem;
 }
-.rounded-full{
-  border-radius: 9999px;
-}
 .rounded-2xl{
   border-radius: 1rem;
 }
-.border{
-  border-width: 1px;
-}
-.border-2{
-  border-width: 2px;
+.rounded-full{
+  border-radius: 9999px;
 }
 .border-4{
   border-width: 4px;
@@ -726,9 +702,6 @@ body {
 .p-6{
   padding: 1.5rem;
 }
-.p-4{
-  padding: 1rem;
-}
 .py-4{
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -737,25 +710,17 @@ body {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
-.px-2{
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-.px-4{
-  padding-left: 1rem;
-  padding-right: 1rem;
+.px-8{
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 .py-2{
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-.py-8{
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-.px-8{
-  padding-left: 2rem;
-  padding-right: 2rem;
+.px-2{
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 .pt-8{
   padding-top: 2rem;
@@ -774,6 +739,10 @@ body {
   font-size: 1.125rem;
   line-height: 1.75rem;
 }
+.text-3xl{
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
 .text-7xl{
   font-size: 4.5rem;
   line-height: 1;
@@ -782,9 +751,13 @@ body {
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
-.text-3xl{
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+.text-2xl{
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.text-4xl{
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 .font-semibold{
   font-weight: 600;
@@ -795,10 +768,6 @@ body {
 .leading-7{
   line-height: 1.75rem;
 }
-.text-info_contrast{
-  --tw-text-opacity: 1;
-  color: rgb(0 110 189 / var(--tw-text-opacity));
-}
 .text-player1-main{
   --tw-text-opacity: 1;
   color: rgb(255 4 4 / var(--tw-text-opacity));
@@ -806,6 +775,10 @@ body {
 .text-player2-main{
   --tw-text-opacity: 1;
   color: rgb(2 2 254 / var(--tw-text-opacity));
+}
+.text-info_contrast{
+  --tw-text-opacity: 1;
+  color: rgb(0 110 189 / var(--tw-text-opacity));
 }
 .underline{
   -webkit-text-decoration-line: underline;

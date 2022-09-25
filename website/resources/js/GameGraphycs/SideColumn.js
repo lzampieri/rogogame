@@ -1,3 +1,5 @@
+import { faB, faBrain, faMicrochip } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import theme from "../theme";
 import Arrow from "./Arrow";
@@ -19,7 +21,9 @@ export default function SideColumn( props ) {
             w-1/5
             flex flex-col justify-between items-center
             ">
-            <span>{ props.ai ? "AI" : "Reale" }</span>
+            <span class="mt-2 text-4xl">
+                <FontAwesomeIcon icon={ props.ai ? faMicrochip : faBrain } />
+            </span>
             <span>
                 { contenuto }
             </span>
