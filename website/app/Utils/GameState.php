@@ -18,10 +18,10 @@ class GameState
         $gs = new GameState();
 
         for( $i = 0; $i < GameState::N; $i++ ) {
-            $a = intval( substr( $id, $i, 2 ) );
+            $a = intval( substr( $id, $i * 2, 2 ) );
             if( $a > 0 ) {
-                if( $i < GameState::N / 2 ) $gs->arrows_red[] = $i;
-                else $gs->arrows_blu[] = $i;
+                if( $i < GameState::N / 2 ) $gs->arrows_red[] = $a;
+                else $gs->arrows_blu[] = $a;
             }
         }
         return $gs;

@@ -1,18 +1,19 @@
-import { usePage } from "@inertiajs/inertia-react";
 import { Component } from "react"
 import CentralCanvas from "../GameGraphycs/CentralCanvas";
+import EndedBanner from "../GameGraphycs/EndedBanner";
 import SideColumn from "../GameGraphycs/SideColumn";
 import AI from "../GameLogic/AI";
+import { AIPlayer, BluPlayer, RealPlayer, RedPlayer } from "../GameLogic/Enumerators";
 import GameState from "../GameLogic/GameState";
 
 
 export default class GameAI extends Component {
-    constructor() {
-        super();
+    constructor( props ) {
+        super( props );
         this.state = {
-            gamestate: new GameState()
+            gamestate: new GameState( 0 )
         }
-        this.AI = new AI( );
+        this.AI = new AI();
     }
 
     addArrow( arr ) {
@@ -21,28 +22,52 @@ export default class GameAI extends Component {
             newState.add( arr );
 
             this.setState( { gamestate: newState } );
-
-            this.AI.get( this.props.type, newState );
         }
+    }
+
+    resetGame( ) {
+        let newState = this.state.gamestate;
+        newState.resetGame();
+        this.setState( { gamestate: newState } );
+    }
+
+    checkForAI( state ) {
+        if( this.state.gamestate.ended() ) return;
+        if( this.state.gamestate.nextPlayerType() == AIPlayer ) {
+            this.AI.get( this.props.type, state, ( arr ) => this.addArrow( arr ) );     
+        }
+    }
+
+    componentDidMount() {
+        this.checkForAI( this.state.gamestate )
+    }
+
+    componentDidUpdate() {
+        this.checkForAI( this.state.gamestate )
     }
 
     render() {
         return (<>
             <div className="w-screen h-screen flex flex-row items-stretch">
-                <SideColumn side={1} active={this.state.gamestate.nextPlayer() == 1} />
+                <SideColumn side={1} active={this.state.gamestate.nextPlayer() == RedPlayer} ai={this.state.gamestate.type_red == AIPlayer} />
                 
                 <div className="grow flex flex-col items-center">
-                    <div className="bg-info">Testo info 1</div>
                     <CentralCanvas
                         gamestate={this.state.gamestate}
                         addArrow={ (arr) => this.addArrow( arr ) }
-                        drawingActive={this.state.gamestate.nextPlayer() == 1}
+                        drawingActive={this.state.gamestate.nextPlayerType() == RealPlayer}
                     />
-                    <div className="bg-info">Testo info 2</div>
+                    <div className="bg-info rounded-full text-info_contrast m-1 px-2 text-sm">
+                        #{this.state.gamestate.hash()}
+                    </div>
                 </div>
                 
-                <SideColumn side={2} active={this.state.gamestate.nextPlayer() == 2} ai/>
+                <SideColumn side={2} active={this.state.gamestate.nextPlayer() == BluPlayer} ai={this.state.gamestate.type_blu == AIPlayer} />
             </div>
+            <EndedBanner
+                gameState={this.state.gamestate} resetCallback={() => resetGame()}
+                
+            />
         </>)
     }
 

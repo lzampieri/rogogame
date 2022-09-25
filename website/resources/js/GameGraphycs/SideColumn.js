@@ -16,7 +16,7 @@ export default function SideColumn( props ) {
             w-1/5
             flex flex-col justify-between items-center
             ">
-            <span>Questo sopra</span>
+            <span>{ props.ai ? "AI" : "Reale" }</span>
             <span>
                 { contenuto }
             </span>

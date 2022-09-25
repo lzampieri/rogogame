@@ -374,6 +374,7 @@ video {
 
 body {
         font-family: 'Comfortaa', cursive;
+        overflow: hidden;
         --tw-bg-opacity: 1;
         background-color: rgb(255 236 209 / var(--tw-bg-opacity));
         --tw-text-opacity: 1;
@@ -525,6 +526,9 @@ body {
 .fixed{
   position: fixed;
 }
+.absolute{
+  position: absolute;
+}
 .relative{
   position: relative;
 }
@@ -533,6 +537,9 @@ body {
 }
 .right-0{
   right: 0px;
+}
+.m-1{
+  margin: 0.25rem;
 }
 .mx-auto{
   margin-left: auto;
@@ -663,6 +670,9 @@ body {
 .rounded-lg{
   border-radius: 0.5rem;
 }
+.rounded-full{
+  border-radius: 9999px;
+}
 .border-t{
   border-top-width: 1px;
 }
@@ -680,6 +690,10 @@ body {
 .px-6{
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+.px-2{
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 .pt-8{
   padding-top: 2rem;
@@ -711,6 +725,10 @@ body {
 }
 .leading-7{
   line-height: 1.75rem;
+}
+.text-info_contrast{
+  --tw-text-opacity: 1;
+  color: rgb(0 110 189 / var(--tw-text-opacity));
 }
 .underline{
   -webkit-text-decoration-line: underline;

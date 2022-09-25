@@ -37,7 +37,7 @@ class MovesController extends Controller {
             try {
                 $new_state = $parsed_state->getMove();
             } catch (ModelNotFoundException $e) {
-                return response( 'Error in the database', 404 );
+                return response( 'Error in the database. Cannot find ' . $parsed_state->getId(), 404 );
             }
 
             $next_move[ $arrow ] = $new_state->WinProb + $new_state->TieProb / 2;

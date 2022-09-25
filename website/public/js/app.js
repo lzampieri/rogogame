@@ -2308,6 +2308,29 @@ function Connect(props) {
 
 /***/ }),
 
+/***/ "./resources/js/GameGraphycs/EndedBanner.js":
+/*!**************************************************!*\
+  !*** ./resources/js/GameGraphycs/EndedBanner.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EndedBanner)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+function EndedBanner(props) {
+  if (!props.gameState.ended()) return null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    className: "absolute w-full top-0 text-center",
+    children: "Gioco terminato!"
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/GameGraphycs/NewArrowsDrawer.js":
 /*!******************************************************!*\
   !*** ./resources/js/GameGraphycs/NewArrowsDrawer.js ***!
@@ -2463,7 +2486,7 @@ function SideColumn(props) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "\r w-1/5\r flex flex-col justify-between items-center\r ",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      children: "Questo sopra"
+      children: props.ai ? "AI" : "Reale"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
       children: contenuto
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Arrow__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -2560,27 +2583,51 @@ var AI = /*#__PURE__*/function () {
   _createClass(AI, [{
     key: "get",
     value: function () {
-      var _get = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(type, current_gamestate) {
-        var api_url;
+      var _get = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(type, current_gamestate, callback) {
+        var api_url, response, move;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                if (!this.running) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 2:
+                this.running = true;
                 api_url = route('api_move', {
                   'type': type,
                   'state': current_gamestate.hash()
                 });
                 console.log(api_url);
+                _context.next = 7;
+                return fetch(api_url);
 
-              case 2:
+              case 7:
+                response = _context.sent;
+                _context.t0 = parseInt;
+                _context.next = 11;
+                return response.text();
+
+              case 11:
+                _context.t1 = _context.sent;
+                move = (0, _context.t0)(_context.t1);
+                console.log("Performing " + move);
+                this.running = false;
+                callback(move);
+
+              case 16:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, this);
       }));
 
-      function get(_x, _x2) {
+      function get(_x, _x2, _x3) {
         return _get.apply(this, arguments);
       }
 
@@ -2595,6 +2642,29 @@ var AI = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./resources/js/GameLogic/Enumerators.js":
+/*!***********************************************!*\
+  !*** ./resources/js/GameLogic/Enumerators.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AIPlayer": () => (/* binding */ AIPlayer),
+/* harmony export */   "BluPlayer": () => (/* binding */ BluPlayer),
+/* harmony export */   "None": () => (/* binding */ None),
+/* harmony export */   "RealPlayer": () => (/* binding */ RealPlayer),
+/* harmony export */   "RedPlayer": () => (/* binding */ RedPlayer)
+/* harmony export */ });
+var RealPlayer = 1;
+var AIPlayer = -1;
+var RedPlayer = 1;
+var BluPlayer = 2;
+var None = 0;
+
+/***/ }),
+
 /***/ "./resources/js/GameLogic/GameState.js":
 /*!*********************************************!*\
   !*** ./resources/js/GameLogic/GameState.js ***!
@@ -2606,6 +2676,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ GameState)
 /* harmony export */ });
+/* harmony import */ var _Enumerators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Enumerators */ "./resources/js/GameLogic/Enumerators.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -2614,28 +2685,62 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
+
 var GameState = /*#__PURE__*/function () {
-  function GameState() {
+  function GameState(how_many_real) {
     _classCallCheck(this, GameState);
 
     _defineProperty(this, "arrows_red", void 0);
 
     _defineProperty(this, "arrows_blu", void 0);
 
-    this.arrows_red = [];
-    this.arrows_blu = [];
+    _defineProperty(this, "type_red", void 0);
+
+    _defineProperty(this, "type_blu", void 0);
+
+    this.resetGame(how_many_real);
   }
 
   _createClass(GameState, [{
+    key: "resetGame",
+    value: function resetGame(how_many_real) {
+      this.arrows_red = [];
+      this.arrows_blu = [];
+
+      if (how_many_real == 1) {
+        this.type_red = Math.random() < 0.5 ? _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RealPlayer : _Enumerators__WEBPACK_IMPORTED_MODULE_0__.AIPlayer;
+        this.type_blu = -this.type_red;
+      } else if (how_many_real == 0) {
+        this.type_red = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.AIPlayer;
+        this.type_blu = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.AIPlayer;
+      } else {
+        this.type_red = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RealPlayer;
+        this.type_blu = _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RealPlayer;
+      }
+    }
+  }, {
     key: "nextPlayer",
     value: function nextPlayer() {
-      if (this.arrows_blu.length < this.arrows_red.length) return 2;else return 1;
+      if (this.ended()) return _Enumerators__WEBPACK_IMPORTED_MODULE_0__.None;
+      if (this.arrows_blu.length < this.arrows_red.length) return _Enumerators__WEBPACK_IMPORTED_MODULE_0__.BluPlayer;else return _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RedPlayer;
+    }
+  }, {
+    key: "nextPlayerType",
+    value: function nextPlayerType() {
+      if (this.ended()) return _Enumerators__WEBPACK_IMPORTED_MODULE_0__.None;
+      if (this.nextPlayer() == _Enumerators__WEBPACK_IMPORTED_MODULE_0__.RedPlayer) return this.type_red;else return this.type_blu;
     }
   }, {
     key: "add",
     value: function add(arr) {
       if (this.arrows_blu.length < this.arrows_red.length) this.arrows_blu.push(arr);else this.arrows_red.push(arr);
-      console.log("Added %d", arr);
+    }
+  }, {
+    key: "ended",
+    value: function ended() {
+      if (this.arrows_blu.length + this.arrows_red.length == 8) return true;
+      return false;
     }
   }, {
     key: "drawable",
@@ -2676,18 +2781,32 @@ var GameState = /*#__PURE__*/function () {
   }, {
     key: "hash",
     value: function hash() {
-      var hash = 0;
-      this.arrows_red.sort();
-      this.arrows_blu.sort();
+      var hash = "";
+      this.arrows_red.sort(function (a, b) {
+        return a - b;
+      });
+      this.arrows_blu.sort(function (a, b) {
+        return a - b;
+      });
+      console.log(this.arrows_red);
+      console.log(this.arrows_blu);
 
       for (var i = 0; i < 8 / 2; i++) {
-        hash *= 8 * 8;
-        if (i < this.arrows_red.length) hash += this.arrows_red[i];
+        if (i < this.arrows_red.length) {
+          if (this.arrows_red[i] < 10) hash += "0";
+          hash += this.arrows_red[i];
+        } else {
+          hash += "00";
+        }
       }
 
       for (var _i = 0; _i < 8 / 2; _i++) {
-        hash *= 8 * 8;
-        if (_i < this.arrows_blu.length) hash += this.arrows_blu[_i];
+        if (_i < this.arrows_blu.length) {
+          if (this.arrows_blu[_i] < 10) hash += "0";
+          hash += this.arrows_blu[_i];
+        } else {
+          hash += "00";
+        }
       }
 
       return hash;
@@ -2727,13 +2846,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ GameAI)
 /* harmony export */ });
-/* harmony import */ var _inertiajs_inertia_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-react */ "./node_modules/@inertiajs/inertia-react/dist/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameGraphycs/CentralCanvas */ "./resources/js/GameGraphycs/CentralCanvas.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GameGraphycs/CentralCanvas */ "./resources/js/GameGraphycs/CentralCanvas.js");
+/* harmony import */ var _GameGraphycs_EndedBanner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameGraphycs/EndedBanner */ "./resources/js/GameGraphycs/EndedBanner.js");
 /* harmony import */ var _GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../GameGraphycs/SideColumn */ "./resources/js/GameGraphycs/SideColumn.js");
 /* harmony import */ var _GameLogic_AI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../GameLogic/AI */ "./resources/js/GameLogic/AI.js");
-/* harmony import */ var _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../GameLogic/GameState */ "./resources/js/GameLogic/GameState.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../GameLogic/Enumerators */ "./resources/js/GameLogic/Enumerators.js");
+/* harmony import */ var _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../GameLogic/GameState */ "./resources/js/GameLogic/GameState.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2766,19 +2886,20 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var GameAI = /*#__PURE__*/function (_Component) {
   _inherits(GameAI, _Component);
 
   var _super = _createSuper(GameAI);
 
-  function GameAI() {
+  function GameAI(props) {
     var _this;
 
     _classCallCheck(this, GameAI);
 
-    _this = _super.call(this);
+    _this = _super.call(this, props);
     _this.state = {
-      gamestate: new _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_5__["default"]()
+      gamestate: new _GameLogic_GameState__WEBPACK_IMPORTED_MODULE_6__["default"](0)
     };
     _this.AI = new _GameLogic_AI__WEBPACK_IMPORTED_MODULE_4__["default"]();
     return _this;
@@ -2793,47 +2914,81 @@ var GameAI = /*#__PURE__*/function (_Component) {
         this.setState({
           gamestate: newState
         });
-        this.AI.get(this.props.type, newState);
       }
+    }
+  }, {
+    key: "resetGame",
+    value: function resetGame() {
+      var newState = this.state.gamestate;
+      newState.resetGame();
+      this.setState({
+        gamestate: newState
+      });
+    }
+  }, {
+    key: "checkForAI",
+    value: function checkForAI(state) {
+      var _this2 = this;
+
+      if (this.state.gamestate.ended()) return;
+
+      if (this.state.gamestate.nextPlayerType() == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer) {
+        this.AI.get(this.props.type, state, function (arr) {
+          return _this2.addArrow(arr);
+        });
+      }
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.checkForAI(this.state.gamestate);
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      this.checkForAI(this.state.gamestate);
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "w-screen h-screen flex flex-row items-stretch",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__["default"], {
             side: 1,
-            active: this.state.gamestate.nextPlayer() == 1
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            active: this.state.gamestate.nextPlayer() == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.RedPlayer,
+            ai: this.state.gamestate.type_red == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "grow flex flex-col items-center",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "bg-info",
-              children: "Testo info 1"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_CentralCanvas__WEBPACK_IMPORTED_MODULE_1__["default"], {
               gamestate: this.state.gamestate,
               addArrow: function addArrow(arr) {
-                return _this2.addArrow(arr);
+                return _this3.addArrow(arr);
               },
-              drawingActive: this.state.gamestate.nextPlayer() == 1
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-              className: "bg-info",
-              children: "Testo info 2"
+              drawingActive: this.state.gamestate.nextPlayerType() == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.RealPlayer
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "bg-info rounded-full text-info_contrast m-1 px-2 text-sm",
+              children: ["#", this.state.gamestate.hash()]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_SideColumn__WEBPACK_IMPORTED_MODULE_3__["default"], {
             side: 2,
-            active: this.state.gamestate.nextPlayer() == 2,
-            ai: true
+            active: this.state.gamestate.nextPlayer() == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.BluPlayer,
+            ai: this.state.gamestate.type_blu == _GameLogic_Enumerators__WEBPACK_IMPORTED_MODULE_5__.AIPlayer
           })]
-        })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_GameGraphycs_EndedBanner__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          gameState: this.state.gamestate,
+          resetCallback: function resetCallback() {
+            return resetGame();
+          }
+        })]
       });
     }
   }]);
 
   return GameAI;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
 
 
@@ -3105,7 +3260,8 @@ module.exports = {
     player1: '#FF7D00',
     player2: '#15616D',
     text: '#78290F',
-    info: '#001524'
+    info: '#001524',
+    info_contrast: '#006EBD'
   }
 };
 

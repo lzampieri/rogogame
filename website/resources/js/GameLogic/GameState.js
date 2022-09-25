@@ -1,19 +1,44 @@
-
+import { AIPlayer, BluPlayer, None, RealPlayer, RedPlayer } from "./Enumerators";
 
 export default class GameState {
     arrows_red;
     arrows_blu;
+    type_red;
+    type_blu;
 
-    constructor() {
-        this.arrows_red = [ ]
-        this.arrows_blu = [ ]
+    constructor( how_many_real ) {
+        this.resetGame( how_many_real );
+    }
+
+    resetGame( how_many_real ) {
+        this.arrows_red = []
+        this.arrows_blu = []
+
+        if( how_many_real == 1 ) {
+            this.type_red = ( Math.random() < 0.5 ? RealPlayer : AIPlayer );
+            this.type_blu = - this.type_red;
+        }
+        else if( how_many_real == 0 ) {
+            this.type_red = AIPlayer;
+            this.type_blu = AIPlayer;
+        } else {
+            this.type_red = RealPlayer;
+            this.type_blu = RealPlayer;
+        }
     }
 
     nextPlayer() {
+        if( this.ended() ) return None;
         if( this.arrows_blu.length < this.arrows_red.length )
-            return 2
+            return BluPlayer;
         else
-            return 1
+            return RedPlayer;
+    }
+
+    nextPlayerType() {
+        if( this.ended() ) return None;
+        if( this.nextPlayer() == RedPlayer ) return this.type_red;
+        else return this.type_blu;
     }
 
     add( arr ) {
@@ -21,8 +46,11 @@ export default class GameState {
             this.arrows_blu.push( arr )
         else
             this.arrows_red.push( arr )
+    }
 
-        console.log( "Added %d", arr )
+    ended() {
+        if( this.arrows_blu.length + this.arrows_red.length == 8 ) return true;
+        return false;
     }
 
     drawable( arr ) {
@@ -67,8 +95,11 @@ export default class GameState {
 
     hash() {
         let hash = "";
-        this.arrows_red.sort();
-        this.arrows_blu.sort();
+        this.arrows_red.sort((a,b)=>a-b);
+        this.arrows_blu.sort((a,b)=>a-b);
+
+        console.log( this.arrows_red )
+        console.log( this.arrows_blu )
 
         for( let i = 0; i < 8/2; i++ ) {
             if( i < this.arrows_red.length ) {

@@ -7,7 +7,7 @@
 @layer base {
     body {
         font-family: 'Comfortaa', cursive;
-        @apply bg-background text-text
+        @apply bg-background text-text overflow-hidden
     }
 }
 
