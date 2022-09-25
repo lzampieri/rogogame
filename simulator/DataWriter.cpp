@@ -12,7 +12,7 @@ DataWriter::DataWriter( int rows_per_file, bool verbose, bool verify )
     basename += "_" + to_string( progressive ) + "_";
 
     filelist = new ofstream( basename + "list.csv" );
-    (*filelist) << "list\n";
+    (*filelist) << "file,first,last\n";
 
     file_count = 0;
     rows_count = rows_per_file + 1;
