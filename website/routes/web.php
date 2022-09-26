@@ -16,18 +16,29 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('TitlePage');
+    return redirect() -> route( 'home' );
 });
 
-Route::get('/game_1pl/{type}', function ($type) {
-    return Inertia::render('GameAI', [ 'num_reals' => 1, 'type' => $type ] );
-})->where('type', '(random|probs|squared_probs|fifth_probs)')
-  ->name('game_1pl');
+Route::get('/home/', function () {
+    return Inertia::render( 'TitlePage', [ 'home' => true ] );
+})
+  ->name('home');
 
-Route::get('/game_0pl/{type}', function ($type) {
-    return Inertia::render('GameAI', [ 'num_reals' => 0, 'type' => $type ] );
-})->where('type', '(random|probs|squared_probs|fifth_probs)')
-  ->name('game_0pl');
+Route::get('/game/', function () {
+    return Inertia::render( 'TitlePage', [ 'select_players' => true ] );
+})
+  ->name('game.select_players');
+
+Route::get('/game/{pl}', function ( $pl ) {
+    return Inertia::render( 'TitlePage', [ 'select_smartness' => true, 'pl' => $pl ] );
+})->where( 'pl', '(0pl|1pl|2pl)' )
+  ->name('game.select_smartness');
+
+Route::get('/game/{pl}/{type}', function ( $pl, $type ) {
+    return Inertia::render( 'GameAI', [ 'pl' => $pl, 'type' => $type ] );
+})->where( 'pl', '(0pl|1pl|2pl)' )
+  ->where('type', '(random|probs|squared_probs|fifth_probs)')
+  ->name('game.play');
 
 Route::get('/data_insertion', [ DataInsertionController::class, 'interface' ] )->name('data_insertion');
 Route::get('/data_insertion/{filename}', [ DataInsertionController::class, 'load' ] )->name('data_insertion.load');

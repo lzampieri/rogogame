@@ -4,9 +4,10 @@ import GameState from "../GameLogic/GameState";
 export default function Connect( props ) {
     const from = GameState.arr_from( props.arrow )
     const to = GameState.arr_to( props.arrow )
+    const width = Math.min( 0.1 * props.x, ( props.ys[1] - props.ys[0] ) / 2 )
     const points = [
         props.x, props.ys[ from ],
-        props.x + 0.05 * props.x * ( from - to ), ( props.ys[ from ] + props.ys[ to ] ) / 2,
+        props.x + width * ( from - to ), ( props.ys[ from ] + props.ys[ to ] ) / 2,
         props.x, props.ys[ to ]
     ]
     return (

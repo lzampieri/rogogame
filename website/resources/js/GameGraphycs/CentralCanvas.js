@@ -5,11 +5,13 @@ import Connect from "./Connect"
 import linspace from "linspace"
 import StateOfGame from "./StateOfGame"
 import NewArrowsDrawer from "./NewArrowsDrawer"
+import { useBreakpoint } from "../useBreakpoints"
 
 
 export default function CentralCanvas( props ) {
     const [ L, setL ] = useState( 100 )
     const [ H, setH ] = useState( 100 )
+    const isMd = useBreakpoint( 'md' )
     const ref = useRef(null)
 
     useEffect( () => {
@@ -23,7 +25,13 @@ export default function CentralCanvas( props ) {
     } )
 
     const mid_x = L/2
-    const ys = linspace( 0.2 * H, 0.8 * H, 8 )
+    let ys = []
+    if( isMd )
+        // Use 60% for md
+        ys = linspace( 0.2 * H, 0.8 * H, 8 )
+    else
+        // Use 80% for small screens
+        ys = linspace( 0.1 * H, 0.9 * H, 8 )
 
     return (
         <div className="w-full grow flex flex-row justify-center my-4" ref={ref}>

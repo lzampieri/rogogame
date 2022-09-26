@@ -5,29 +5,33 @@ import SideColumn from "../GameGraphycs/SideColumn";
 import AI from "../GameLogic/AI";
 import { AIPlayer, BluPlayer, RealPlayer, RedPlayer } from "../GameLogic/Enumerators";
 import GameState from "../GameLogic/GameState";
-
+import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from 'notistack';
 
 export default class GameAI extends Component {
     constructor( props ) {
         super( props );
         this.state = {
-            gamestate: new GameState( props.num_reals, props.type )
+            gamestate: new GameState( parseInt( props.pl ), props.type, ( new_id ) => this.setState( { saved_id: new_id } ) ),
+            saved_id: null
         }
         this.AI = new AI( props.type );
     }
 
     addArrow( arr ) {
+        closeSnackbar();
         if( this.state.gamestate.drawable( arr ) ) {
             let newState = this.state.gamestate;
             newState.add( arr );
 
             this.setState( { gamestate: newState } );
+        } else {
+            enqueueSnackbar( 'Mossa non permessa.', { variant: 'warning' } );
         }
     }
 
     resetGame( ) {
         let newState = this.state.gamestate;
-        newState.resetGame( 0 );
+        newState.resetGame( );
         this.setState( { gamestate: newState } );
     }
 
@@ -48,7 +52,8 @@ export default class GameAI extends Component {
 
     render() {
         return (<>
-            <div className="w-screen h-screen flex flex-row items-stretch">
+            <div className="w-screen h-screen flex flex-col md:flex-row items-stretch">
+                <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />
                 <SideColumn side={1} active={this.state.gamestate.nextPlayer() == RedPlayer} ai={this.state.gamestate.type_red == AIPlayer} winner={this.state.gamestate.ended() && this.state.gamestate.results().winner == RedPlayer} />
                 
                 <div className="grow flex flex-col items-center">
@@ -57,8 +62,11 @@ export default class GameAI extends Component {
                         addArrow={ (arr) => this.addArrow( arr ) }
                         drawingActive={this.state.gamestate.nextPlayerType() == RealPlayer}
                     />
-                    <div className="bg-info rounded-full text-info_contrast m-1 px-2 text-sm">
-                        #{this.state.gamestate.hash()}
+                    <div className="bg-info rounded-full  m-1 px-2 text-sm">
+                        <span className="text-info_contrast">#{this.state.gamestate.hash()}</span>
+                        { this.state.saved_id && <>
+                            &nbsp;-&nbsp;<span className="text-player1-parque">#{this.state.saved_id}</span>
+                        </>}
                     </div>
                 </div>
                 
@@ -66,7 +74,6 @@ export default class GameAI extends Component {
             </div>
             <EndedBanner
                 gameState={this.state.gamestate} resetCallback={() => this.resetGame()}
-                
             />
         </>)
     }

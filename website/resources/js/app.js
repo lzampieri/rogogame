@@ -1,5 +1,7 @@
 require('./bootstrap');
 
+document.documentElement.style.setProperty("--vh", window.innerHeight * 0.01 + 'px');
+
 import React from 'react'
 import { render } from 'react-dom'
 import { createInertiaApp } from '@inertiajs/inertia-react'

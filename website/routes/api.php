@@ -22,9 +22,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get(
-    '/move/{type}/{state}',
-    [ MovesController::class, 'get' ]
-    )->where('type', '(random|probs|squared_probs|fifth_probs)')
+        '/move/{type}/{state}',
+        [ MovesController::class, 'get' ]
+    )
+    ->where('type', '(random|probs|squared_probs|fifth_probs)')
     ->name('api_move');
 
 Route::get(
@@ -46,4 +47,8 @@ Route::get(
 Route::get(
     '/migrate_refresh',
     function() { Artisan::call('migrate:refresh'); }
+);
+Route::get(
+    '/clear_cache',
+    function() { Artisan::call('cache:clear'); }
 );

@@ -7,23 +7,29 @@ export default class GameState {
     type_blu;
 
     ai_type;
+    how_many_real;
 
     cached_results;
 
-    constructor( how_many_real, ai_type ) {
+    setIdCallback;
+
+    constructor( how_many_real, ai_type, setIdCallback ) {
         this.ai_type = ai_type;
-        this.resetGame( how_many_real );
+        this.setIdCallback = null;
+        this.how_many_real = how_many_real;
+        this.resetGame( );
+        this.setIdCallback = setIdCallback;
     }
 
-    resetGame( how_many_real ) {
+    resetGame( ) {
         this.arrows_red = []
         this.arrows_blu = []
 
-        if( how_many_real == 1 ) {
+        if( this.how_many_real == 1 ) {
             this.type_red = ( Math.random() < 0.5 ? RealPlayer : AIPlayer );
             this.type_blu = - this.type_red;
         }
-        else if( how_many_real == 0 ) {
+        else if( this.how_many_real == 0 ) {
             this.type_red = AIPlayer;
             this.type_blu = AIPlayer;
         } else {
@@ -32,6 +38,9 @@ export default class GameState {
         }
 
         this.cached_results = null;
+
+        if( this.setIdCallback )
+            this.setIdCallback( null );
     }
 
     nextPlayer() {
@@ -87,7 +96,7 @@ export default class GameState {
         for( let i = 0; i < all_arrows.length; i++ ) {
             if( next == GameState.arr_from( all_arrows[i] ) ) {
                 next = GameState.arr_to( all_arrows[i] );
-                count += 1;
+                count = count + 1;
                 i = -1;
                 if( next == from ) {
                     console.log("Il ciclo risulta di: " + count)
@@ -242,13 +251,17 @@ export default class GameState {
     }
 
     async save_match( results ) {
-        await $.post( route( 'api_game_register' ), {
+        let res = await $.post( route( 'api_game_register' ), {
             redtype: ( this.type_red == RealPlayer ? 'real' : this.ai_type ),
             blutype: ( this.type_blu == RealPlayer ? 'real' : this.ai_type ),
             redpoints: results.points_red,
             blupoints: results.points_blu,
             final_state: this.hash()
         } );
+
+        if( res && res.id ) {
+            this.setIdCallback( res.id );
+        }
     }
 
     static arr_from( a ) { return a % 8 }

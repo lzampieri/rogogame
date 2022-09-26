@@ -47,9 +47,9 @@ class MovesController extends Controller {
             elseif( $type == 'probs' )
                 $next_move[ $arrow ] ** 1;
             elseif( $type == 'squared_probs' )
-                $next_move[ $arrow ] ** 1;
+                $next_move[ $arrow ] ** 2;
             elseif( $type == 'fifth_probs' )
-                $next_move[ $arrow ] ** 1;
+                $next_move[ $arrow ] ** 5;
         }
 
         // Get total

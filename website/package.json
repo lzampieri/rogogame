@@ -30,6 +30,8 @@
         "@fortawesome/free-solid-svg-icons": "^6.2.0",
         "@fortawesome/react-fontawesome": "^0.2.0",
         "jquery": "^3.6.1",
-        "linspace": "^1.0.2"
+        "linspace": "^1.0.2",
+        "notistack": "^3.0.0-alpha.7",
+        "react-responsive": "^9.0.0"
     }
 }

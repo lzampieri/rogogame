@@ -1,35 +1,47 @@
 import { useEffect, useRef, useState } from "react"
 import { Layer, RegularPolygon, Stage } from "react-konva"
+import { useBreakpoint } from "../useBreakpoints"
 
 
 export default function Arrow( props ) {
-    const maxL = 100
-    const [ L, setL ] = useState( 100 )
+    const maxDim = 100
+    const [ dim, setDim ] = useState( 100 )
+    const isMd = useBreakpoint( 'md' )
     const ref = useRef(null)
 
     useEffect( () => {
         function resizeDetected() {
-            setL( maxL > ref.current.offsetWidth ? ref.current.offsetWidth : maxL )
+            // If vertical (i.e. >md) use the width
+            if( isMd )
+                setDim( maxDim > ref.current.offsetWidth ? ref.current.offsetWidth : maxDim )
+            // Else use the height
+            else
+                setDim( maxDim > ref.current.offsetHeight ? ref.current.offsetHeight : maxDim )
         }
         window.addEventListener( 'resize', resizeDetected )
         resizeDetected()
         return () => window.removeEventListener( 'resize', resizeDetected )
     } )
 
-    const side = L * 0.8
+    const side = dim * 0.8
     let polys = {}
     if( props.direction == 'up' ) {
-        polys = { x: L/2, y: L/2 + side*0.144, radius: side/1.73 }
+        polys = { x: dim/2, y: dim/2 + side*0.144, radius: side/1.73 }
     } else {
-        polys = { x: L/2, y: L/2 - side*0.144, radius: side/1.73, rotation: 60 }
+        polys = { x: dim/2, y: dim/2 - side*0.144, radius: side/1.73, rotation: 60 }
     }
 
     return (
         <div
-            className={"w-full flex flex-row justify-center my-4 " + ( props.pulsing ? 'animate-pulse' : '' ) }
+            className={
+                "flex justify-center my-4 " +
+                "   h-full    w-auto    flex-col " +
+                "md:h-auto md:w-full md:flex-row " +
+                ( props.pulsing ? 'animate-pulse' : '' )
+                }
             ref={ref}>
             <Stage
-                width={L} height={L}>
+                width={dim} height={dim}>
                 <Layer>
                     <RegularPolygon
                         {...polys}

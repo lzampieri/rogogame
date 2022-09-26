@@ -1,3 +1,4 @@
+import { Link } from "@inertiajs/inertia-react";
 
 
 export default function EndedBanner( props ) {
@@ -10,7 +11,11 @@ export default function EndedBanner( props ) {
                     &nbsp;&nbsp;-&nbsp;&nbsp;
                     <span className="text-player2-main">{ props.gameState.results().points_blu }</span>
                 </span>
-                <span onClick={ props.resetCallback } className="underline cursor-pointer">Reset</span>
+                <span>
+                    <span onClick={ props.resetCallback } className="underline cursor-pointer">Reset</span>
+                    &nbsp;•&nbsp;
+                    <Link href={ route( 'home' ) } className="underline cursor-pointer">Home</Link>
+                </span>
             </div>
         </div>
     )

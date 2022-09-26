@@ -15,4 +15,10 @@
     .title-page-a {
         @apply px-3 hover:underline cursor-pointer
     }
+
+    .h-screen { /* Correction for mobile */
+        height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+        height: calc(var(--vh, 1vh) * 100);
+    }
+
 }

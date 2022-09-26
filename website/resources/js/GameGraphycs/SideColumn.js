@@ -2,24 +2,28 @@ import { faB, faBrain, faMicrochip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import theme from "../theme";
+import { useBreakpoint } from "../useBreakpoints";
 import Arrow from "./Arrow";
 
 
 export default function SideColumn( props ) {
     let contenuto = "";
+    const isMd = useBreakpoint( 'md' );
     if( props.active ) {
         if( props.ai )
             contenuto = "Ragionando..."
         else
             contenuto = "È il turno del giocatore " + ( props.side == 1 ? 'rosso' : 'blu' );
     }
-    if( props.winner )
+    if( props.winner && isMd )
         contenuto = "Vincitore!"
 
     return (
         <div className="
-            w-1/5
-            flex flex-col justify-between items-center
+            flex
+               flex-row    h-[10%]     w-full
+            md:flex-col md:h-full   md:w-1/5
+            justify-between items-center
             ">
             <span className="mt-2 text-4xl">
                 <FontAwesomeIcon icon={ props.ai ? faMicrochip : faBrain } />
