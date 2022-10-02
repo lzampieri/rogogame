@@ -16,6 +16,8 @@ export default function Connect( props ) {
             tension={ 1 }
             fill={ props.color }
             stroke={ props.color }
+            dash={[10, 5]}
+            dashEnabled={ props.dashed || false }
         />
     )
 }

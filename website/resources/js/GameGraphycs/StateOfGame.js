@@ -6,8 +6,9 @@ import DoubleCrossingSignal from "./DoubleCrossingSignal";
 
 export default function StateOfGame( props ) {
     let results = (<></>)
-    if( props.gamestate.ended() ) {
-        let outcome = props.gamestate.results();
+    let force = props.forceResults || false
+    if( ( props.gamestate.ended() || force ) && !( props.forceNoResults || false ) ) {
+        let outcome = props.gamestate.results( force );
         results = (
             <>
             { outcome.double_arrows_red.map( a =>
@@ -39,6 +40,9 @@ export default function StateOfGame( props ) {
             ) }
             { props.gamestate.arrows_blu.map( a =>
                 <Connect arrow={a} color={ theme.colors.player2.parque } x={ props.mid_x } ys={props.ys} key={a} />
+            ) }
+            { props.arrows_extra && props.arrows_extra.map( a =>
+                <Connect arrow={a} color={ theme.colors.player1.main } x={ props.mid_x } ys={props.ys} key={a} dashed />
             ) }
             { results }
         </Layer>

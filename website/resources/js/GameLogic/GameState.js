@@ -133,8 +133,27 @@ export default class GameState {
         return hash;
     }
 
-    results() {
-        if( !this.ended() ) return null;
+    static parseHash( theHash ) {
+        let gs = new GameState();
+        gs.arrows_red = [];
+        gs.arrows_blu = [];
+        
+        for( let i = 0; i < 8/2; i++ ) {
+            let a = parseInt( theHash.substring( 2 * i, 2 * i + 2 ) );
+            if( a > 0 )
+                gs.arrows_red.push( a );
+        }
+        for( let i = 0; i < 8/2; i++ ) {
+            let a = parseInt( theHash.substring( 2 * i + 8, 2 * i + 10 ) );
+            if( a > 0 )
+                gs.arrows_blu.push( a );
+        }
+        return gs
+    }
+
+
+    results( force = false ) {
+        if( !this.ended() && !force ) return null;
         if( this.cached_results ) return this.cached_results; // If results are already computed, send them back
         
         let points_red = 0;
@@ -245,7 +264,8 @@ export default class GameState {
             winner: winner
         }
 
-        this.save_match( this.cached_results );
+        if( !force )
+            this.save_match( this.cached_results );
 
         return this.cached_results;
     }

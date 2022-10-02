@@ -40,7 +40,7 @@ class MovesController extends Controller {
                 return response( 'Error in the database. Cannot find ' . $parsed_state->getId(), 404 );
             }
 
-            $next_move[ $arrow ] = $new_state->WinProb + $new_state->TieProb / 2;
+            $next_move[ $arrow ] = $new_state->WinProb + $new_state->TieProb / 10;
         
             if( $type == 'random' )
                 $next_move[ $arrow ] ** 0;

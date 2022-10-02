@@ -52,7 +52,7 @@ export default class GameAI extends Component {
 
     render() {
         return (<>
-            <div className="w-screen h-screen flex flex-col md:flex-row items-stretch">
+            <div className="w-screen h-screen flex flex-col md:flex-row items-stretch overflow-hidden">
                 <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />
                 <SideColumn side={1} active={this.state.gamestate.nextPlayer() == RedPlayer} ai={this.state.gamestate.type_red == AIPlayer} winner={this.state.gamestate.ended() && this.state.gamestate.results().winner == RedPlayer} />
                 

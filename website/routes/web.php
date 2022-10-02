@@ -43,3 +43,11 @@ Route::get('/game/{pl}/{type}', function ( $pl, $type ) {
 Route::get('/data_insertion', [ DataInsertionController::class, 'interface' ] )->name('data_insertion');
 Route::get('/data_insertion/{filename}', [ DataInsertionController::class, 'load' ] )->name('data_insertion.load');
 Route::get('/data_insertion_truncate', [ DataInsertionController::class, 'truncate' ] )->name('data_insertion.truncate');
+
+Route::get('/rules', function () {
+  return Inertia::render( 'RulesPage' );
+})->name('rules');
+
+Route::get('/about', function () {
+  return Inertia::render( 'AboutPage' );
+})->name('about');

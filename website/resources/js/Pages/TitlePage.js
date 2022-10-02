@@ -2,19 +2,19 @@ import { Link } from "@inertiajs/inertia-react";
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 
-export default function title( props ) {
+export default function titlePage( props ) {
     const unimplemeted = () => enqueueSnackbar( 'Opzione non ancora implementata', { variant: 'warning' } );
 
     return (<>
-        <div className="w-screen h-screen flex flex-col justify-center items-center">
+        <div className="w-screen h-screen flex flex-col justify-center items-center overflow-hidden">
             <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />
             <span className="text-7xl md:text-9xl">strali</span>
             { props.home && 
                 ( <div className="flex flex-col md:flex-row justify-center items-center text-xl pt-4">
                     <Link className="title-page-a" href={ route('game.select_players') }>gioca</Link>
-                    <a className="title-page-a" onClick={ unimplemeted }>regole</a>
+                    <Link className="title-page-a" href={ route('rules') }>regole</Link>
                     <a className="title-page-a" onClick={ unimplemeted }>statistiche</a>
-                    <a className="title-page-a" onClick={ unimplemeted }>informazioni</a>
+                    <Link className="title-page-a" href={ route('about') }>informazioni</Link>
                 </div> )
             }
             { props.select_players && 

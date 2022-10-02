@@ -11,27 +11,28 @@
     },
     "devDependencies": {
         "@babel/preset-react": "^7",
+        "@fortawesome/fontawesome-svg-core": "^6.2.0",
+        "@fortawesome/free-solid-svg-icons": "^6.2.0",
+        "@fortawesome/react-fontawesome": "^0.2.0",
         "@inertiajs/inertia": "^0.11",
         "@inertiajs/inertia-react": "^0.8",
         "@inertiajs/progress": "^0.2",
         "autoprefixer": "^10",
         "axios": "^0.21",
+        "jquery": "^3.6.1",
         "konva": "^8",
         "laravel-mix": "^6",
+        "linspace": "^1.0.2",
         "lodash": "^4",
+        "notistack": "^3.0.0-alpha.7",
         "postcss": "^8",
         "react": "^17",
         "react-dom": "^17",
         "react-konva": "17.0.2-6",
+        "react-responsive": "^9.0.0",
         "tailwindcss": "^3"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^6.2.0",
-        "@fortawesome/free-solid-svg-icons": "^6.2.0",
-        "@fortawesome/react-fontawesome": "^0.2.0",
-        "jquery": "^3.6.1",
-        "linspace": "^1.0.2",
-        "notistack": "^3.0.0-alpha.7",
-        "react-responsive": "^9.0.0"
+        "react-scrollama": "^2.3.2"
     }
 }
