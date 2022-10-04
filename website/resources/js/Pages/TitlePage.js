@@ -12,6 +12,7 @@ export default function titlePage( props ) {
             { props.home && 
                 ( <div className="flex flex-col md:flex-row justify-center items-center text-xl pt-4">
                     <Link className="title-page-a" href={ route('game.select_players') }>gioca</Link>
+                    <Link className="title-page-a" href={ route('multiplayer') }>debug</Link>
                     <Link className="title-page-a" href={ route('rules') }>regole</Link>
                     <a className="title-page-a" onClick={ unimplemeted }>statistiche</a>
                     <Link className="title-page-a" href={ route('about') }>informazioni</Link>

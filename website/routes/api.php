@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\GamesController;
 use App\Http\Controllers\MovesController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 Route::get(
         '/move/{type}/{state}',
@@ -39,16 +33,3 @@ Route::post(
     [ GamesController::class, 'register' ]
     )
     ->name('api_game_register');
-
-Route::get(
-    '/migrate',
-    function() { Artisan::call('migrate'); }
-);
-Route::get(
-    '/migrate_refresh',
-    function() { Artisan::call('migrate:refresh'); }
-);
-Route::get(
-    '/clear_cache',
-    function() { Artisan::call('cache:clear'); }
-);
