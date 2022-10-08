@@ -37,7 +37,7 @@ Route::get('/game/{pl}', function ( $pl ) {
   ->name('game.select_smartness');
 
 Route::get('/game/{pl}/{type}', function ( $pl, $type ) {
-    return Inertia::render( 'GameAI', [ 'pl' => $pl, 'type' => $type ] );
+    return Inertia::render( 'GamePage', [ 'pl' => $pl, 'type' => $type ] );
 })->where( 'pl', '(0pl|1pl|2pl)' )
   ->where('type', '(random|probs|squared_probs|fifth_probs)')
   ->name('game.play');
@@ -50,9 +50,13 @@ Route::get('/about', function () {
   return Inertia::render( 'AboutPage' );
 })->name('about');
 
-Route::get('/multiplayer', function () {
-  return Inertia::render( 'OnlineGamePage', [ 'token' => AblyTokenCreator::getToken() ] );
-})->name('multiplayer');
+Route::get('/arena', function () {
+  return Inertia::render( 'ArenaPage', [ 'ably' => AblyTokenCreator::getAblyParams() ] );
+})->name('arena');
+
+Route::get('/game/multiplayer/{against}', function ( $against ) {
+  return Inertia::render( 'OnlineGamePage', [ 'ably' => AblyTokenCreator::getAblyParams(), 'against' => $against ] );
+})->name('game.multiplayer');
 
 
 // Various utilities
@@ -62,4 +66,6 @@ Route::get('/data_insertion/{filename}', [ DataInsertionController::class, 'load
 Route::get('/data_insertion_truncate', [ DataInsertionController::class, 'truncate' ] )->name('data_insertion.truncate');
 Route::get('/migrate', function() { return Artisan::call('migrate'); } )->name('migrate');
 Route::get('/clear_cache', function() { return Artisan::call('cache:clear'); } )->name('clear_cache');
-Route::get('/get_ably_token', function() { return AblyTokenCreator::getToken(); } )->name('get_ably_token');
+Route::get('/get_ably_params', function() { return AblyTokenCreator::getAblyParams(); } )->name('get_ably_params');
+Route::get('/get_client_id', function() { return AblyTokenCreator::getClientId(); } )->name('get_client_id');
+Route::get('/clear_client_id', function() { return AblyTokenCreator::clearClientId(); } )->name('clear_client_id');

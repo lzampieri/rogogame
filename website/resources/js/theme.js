@@ -13,6 +13,7 @@ module.exports = {
         },
         text: '#78290F',
         info: '#001524',
-        info_contrast: '#006EBD'
+        info_contrast: '#006EBD',
+        black: '#000000aa'
     },
 }
