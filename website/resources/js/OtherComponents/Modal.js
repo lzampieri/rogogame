@@ -14,7 +14,7 @@ export default function Modal( props ) {
                 rounded border bg-background
                 flex flex-col justify-center items-center
                 text-center
-                gap-4
+                gap-4 p-4
             ">
                 { props.children }
             </div>

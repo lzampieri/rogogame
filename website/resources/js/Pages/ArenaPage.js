@@ -77,7 +77,7 @@ export default class onlineGamePage extends Component {
             <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />
             <div className="w-screen h-screen flex flex-col justify-center items-center overflow-hidden">
                 <span className="text-5xl md:text-7xl">Arena</span>
-                <div className="flex flex-row flex-wrap justify-center gap-4 w-1/3 mt-8">
+                <div className="flex flex-row flex-wrap justify-center gap-4 w-full md:w-1/3 mt-8 text-center">
                     { this.state.presents.map( ( id ) =>
                         <div
                             href={id}
@@ -86,7 +86,7 @@ export default class onlineGamePage extends Component {
                             className="
                                 aspect-square shadow-2xl border-2 border-text 
                                 bg-text text-background hover:bg-background hover:text-text 
-                                w-1/5 
+                                w-1/4 md:w-1/5 
                                 flex flex-col items-center justify-center gap-2
                                 cursor-pointer">
                             <FontAwesomeIcon icon={ faBrain } className="text-2xl"/>
