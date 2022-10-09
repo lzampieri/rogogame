@@ -2,7 +2,7 @@ import { faBrain } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { closeSnackbar, enqueueSnackbar, SnackbarProvider } from "notistack";
 import { Component, useEffect, useState } from "react";
-import RemoteManager from "../OtherComponents/ArenaRemoteManager";
+import ArenaRemoteManager from "../OtherComponents/ArenaRemoteManager";
 import Modal from "../OtherComponents/Modal";
 
 export default class onlineGamePage extends Component {
@@ -19,8 +19,8 @@ export default class onlineGamePage extends Component {
     }
 
     componentDidMount( ) {
-        this.remoteManager = new RemoteManager( );
-        this.remoteManager.connectToArena(
+        this.arenaRemoteManager = new ArenaRemoteManager( );
+        this.arenaRemoteManager.connectToArena(
             this.props.ably.token, this.props.ably.clientId,
             ( data ) => this.challenged( data ),
             ( data ) => this.challengeAccepted( data ),
@@ -33,13 +33,13 @@ export default class onlineGamePage extends Component {
         closeSnackbar();
         if( this.state.isUnderChallenge || this.state.isChallenging ) return;
         this.setState( { isChallenging: true } )
-        this.remoteManager.sendChallenge( id )
+        this.arenaRemoteManager.sendChallenge( id )
     }
 
     challenged( data ) {
         closeSnackbar();
         if( this.state.isUnderChallenge || this.state.isChallenging ) {
-            this.remoteManager.sendChallengeAborted( data.from )
+            this.arenaRemoteManager.sendChallengeAborted( data.from )
         }
         else {
             this.setState( { isUnderChallenge: true, challengedBy: data.from, challengedByName: 'Anonimo' } )
@@ -47,16 +47,16 @@ export default class onlineGamePage extends Component {
     }
 
     acceptChallenge() {
-        this.remoteManager.sendChallengeAccepted( this.state.challengedBy )
-        window.location.href = route( 'game.multiplayer', { against: this.state.challengedBy } )
+        this.arenaRemoteManager.sendChallengeAccepted( this.state.challengedBy )
+        window.location.href = route( 'game.multiplayer', { against: this.state.challengedBy, role: 'master' } )
     }
     challengeAccepted( data ) {
-        window.location.href = route( 'game.multiplayer', { against: data.from } )
+        window.location.href = route( 'game.multiplayer', { against: data.from, role: 'slave' } )
     }
 
     rejectChallenge() {
         this.setState( { isUnderChallenge: false } )
-        this.remoteManager.sendChallengeRejected( this.state.challengedBy )
+        this.arenaRemoteManager.sendChallengeRejected( this.state.challengedBy )
     }
     challengeRejected( data ) {
         if( data.from == this.state.challenged ) {

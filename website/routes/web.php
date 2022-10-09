@@ -54,9 +54,13 @@ Route::get('/arena', function () {
   return Inertia::render( 'ArenaPage', [ 'ably' => AblyTokenCreator::getAblyParams() ] );
 })->name('arena');
 
-Route::get('/game/multiplayer/{against}', function ( $against ) {
-  return Inertia::render( 'OnlineGamePage', [ 'ably' => AblyTokenCreator::getAblyParams(), 'against' => $against ] );
-})->name('game.multiplayer');
+Route::get('/game/multiplayer/{against}/{role}', function ( $against, $role ) {
+  return Inertia::render( 'OnlineGamePage', [
+    'ably' => AblyTokenCreator::getAblyParams(), 
+    'against' => $against,
+    'role' => $role ] );
+})->where('role', '(master|slave)')
+  ->name('game.multiplayer');
 
 
 // Various utilities

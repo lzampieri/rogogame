@@ -9,8 +9,8 @@ class GamesController extends Controller {
 
     public function register( Request $request ) {
         $validated = $request->validate([
-            'redtype'  => 'required|string|min:3|max:16',
-            'blutype'  => 'required|string|min:3|max:16',
+            'redtype'  => 'required|string|min:3|max:40',
+            'blutype'  => 'required|string|min:3|max:40',
             'redpoints'=> 'required|integer',
             'blupoints'=> 'required|integer',
             'final_state'=> 'required|string|exists:strali_moves,id'

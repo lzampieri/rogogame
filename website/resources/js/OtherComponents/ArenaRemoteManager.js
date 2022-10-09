@@ -1,6 +1,6 @@
 import Ably from 'ably'
 
-export default class RemoteManager {
+export default class ArenaRemoteManager {
     ably;
     clientId;
 

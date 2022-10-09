@@ -16,8 +16,8 @@ class CreateGamesTable extends Migration
         Schema::create('strali_games', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('redtype', 16);
-            $table->string('blutype', 16);
+            $table->string('redtype', 40);
+            $table->string('blutype', 40);
             $table->smallInteger('redpoints')->nullable();
             $table->smallInteger('blupoints')->nullable();
             $table->string('final_state',16);

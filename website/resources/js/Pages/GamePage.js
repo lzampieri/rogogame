@@ -3,15 +3,15 @@ import CentralCanvas from "../GameGraphycs/CentralCanvas";
 import EndedBanner from "../GameGraphycs/EndedBanner";
 import SideColumn from "../GameGraphycs/SideColumn";
 import AI from "../GameLogic/AI";
+import OfflineGameState from "../GameLogic/OfflineGameState";
 import { AIPlayer, BluPlayer, RealPlayer, RedPlayer } from "../GameLogic/Enumerators";
-import GameState from "../GameLogic/GameState";
 import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from 'notistack';
 
 export default class GamePage extends Component {
     constructor( props ) {
         super( props );
         this.state = {
-            gamestate: new GameState( parseInt( props.pl ), props.type, ( new_id ) => this.setState( { saved_id: new_id } ) ),
+            gamestate: new OfflineGameState( parseInt( props.pl ), props.type, ( new_id ) => this.setState( { saved_id: new_id } ) ),
             saved_id: null
         }
         this.AI = new AI( props.type );
@@ -30,9 +30,7 @@ export default class GamePage extends Component {
     }
 
     resetGame( ) {
-        let newState = this.state.gamestate;
-        newState.resetGame( );
-        this.setState( { gamestate: newState } );
+        this.setState( { gamestate: new OfflineGameState( this.state.gamestate.how_many_real, this.state.gamestate.ai_type, this.state.gamestate.setIdCallback ) } );
     }
 
     checkForAI( state ) {
@@ -54,7 +52,10 @@ export default class GamePage extends Component {
         return (<>
             <div className="w-screen h-screen flex flex-col md:flex-row items-stretch overflow-hidden">
                 <SnackbarProvider anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />
-                <SideColumn side={1} active={this.state.gamestate.nextPlayer() == RedPlayer} ai={this.state.gamestate.type_red == AIPlayer} winner={this.state.gamestate.ended() && this.state.gamestate.results().winner == RedPlayer} />
+                <SideColumn
+                    side={RedPlayer}
+                    gamestate={this.state.gamestate}
+                    />
                 
                 <div className="grow flex flex-col items-center">
                     <CentralCanvas
@@ -70,7 +71,10 @@ export default class GamePage extends Component {
                     </div>
                 </div>
                 
-                <SideColumn side={2} active={this.state.gamestate.nextPlayer() == BluPlayer} ai={this.state.gamestate.type_blu == AIPlayer} winner={this.state.gamestate.ended() && this.state.gamestate.results().winner == BluPlayer} />
+                <SideColumn
+                    side={BluPlayer}
+                    gamestate={this.state.gamestate}
+                    />
             </div>
             <EndedBanner
                 gameState={this.state.gamestate} resetCallback={() => this.resetGame()}

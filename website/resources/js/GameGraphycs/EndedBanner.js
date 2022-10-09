@@ -12,8 +12,10 @@ export default function EndedBanner( props ) {
                     <span className="text-player2-main">{ props.gameState.results().points_blu }</span>
                 </span>
                 <span>
-                    <span onClick={ props.resetCallback } className="underline cursor-pointer">Reset</span>
-                    &nbsp;•&nbsp;
+                    { props.resetCallback && 
+                        <span onClick={ props.resetCallback } className="underline cursor-pointer">Reset</span>
+                    }
+                    { props.resetCallback && "&nbsp;•&nbsp;" }
                     <Link href={ route( 'home' ) } className="underline cursor-pointer">Home</Link>
                 </span>
             </div>

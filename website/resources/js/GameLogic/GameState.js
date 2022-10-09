@@ -1,4 +1,4 @@
-import { AIPlayer, BluPlayer, None, RealPlayer, RedPlayer } from "./Enumerators";
+import { BluPlayer, None, RealPlayer, RedPlayer } from "./Enumerators";
 
 export default class GameState {
     arrows_red;
@@ -13,34 +13,13 @@ export default class GameState {
 
     setIdCallback;
 
-    constructor( how_many_real, ai_type, setIdCallback ) {
-        this.ai_type = ai_type;
-        this.setIdCallback = null;
-        this.how_many_real = how_many_real;
-        this.resetGame( );
+    constructor( setIdCallback ) {
         this.setIdCallback = setIdCallback;
-    }
 
-    resetGame( ) {
         this.arrows_red = []
         this.arrows_blu = []
 
-        if( this.how_many_real == 1 ) {
-            this.type_red = ( Math.random() < 0.5 ? RealPlayer : AIPlayer );
-            this.type_blu = - this.type_red;
-        }
-        else if( this.how_many_real == 0 ) {
-            this.type_red = AIPlayer;
-            this.type_blu = AIPlayer;
-        } else {
-            this.type_red = RealPlayer;
-            this.type_blu = RealPlayer;
-        }
-
         this.cached_results = null;
-
-        if( this.setIdCallback )
-            this.setIdCallback( null );
     }
 
     nextPlayer() {
@@ -54,6 +33,11 @@ export default class GameState {
     nextPlayerType() {
         if( this.ended() ) return None;
         if( this.nextPlayer() == RedPlayer ) return this.type_red;
+        else return this.type_blu;
+    }
+
+    playerType( which ) {
+        if( which == RedPlayer ) return this.type_red;
         else return this.type_blu;
     }
 
@@ -99,7 +83,6 @@ export default class GameState {
                 count = count + 1;
                 i = -1;
                 if( next == from ) {
-                    console.log("Il ciclo risulta di: " + count)
                     if( count < 8 - 1 )
                         return false;
                 }
@@ -270,17 +253,26 @@ export default class GameState {
         return this.cached_results;
     }
 
-    async save_match( results ) {
-        let res = await $.post( route( 'api_game_register' ), {
-            redtype: ( this.type_red == RealPlayer ? 'real' : this.ai_type ),
-            blutype: ( this.type_blu == RealPlayer ? 'real' : this.ai_type ),
-            redpoints: results.points_red,
-            blupoints: results.points_blu,
-            final_state: this.hash()
-        } );
+    getPlayerForSaving( type ) {
+        throw new Error('getPlayerForSaving not properly impemented.');
+    }
+    shouldISave( ) {
+        throw new Error('shouldISave not properly impemented.');
+    }
 
-        if( res && res.id ) {
-            this.setIdCallback( res.id );
+    async save_match( results ) {
+        if( this.shouldISave() ) {
+            let res = await $.post( route( 'api_game_register' ), {
+                redtype: this.getPlayerForSaving( this.type_red ),
+                blutype: this.getPlayerForSaving( this.type_blu ),
+                redpoints: results.points_red,
+                blupoints: results.points_blu,
+                final_state: this.hash()
+            } );
+
+            if( res && res.id ) {
+                this.setIdCallback( res.id );
+            }
         }
     }
 
