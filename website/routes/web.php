@@ -70,6 +70,7 @@ Route::get('/data_insertion/{filename}', [ DataInsertionController::class, 'load
 Route::get('/data_insertion_truncate', [ DataInsertionController::class, 'truncate' ] )->name('data_insertion.truncate');
 Route::get('/migrate', function() { return Artisan::call('migrate'); } )->name('migrate');
 Route::get('/clear_cache', function() { return Artisan::call('cache:clear'); } )->name('clear_cache');
+Route::get('/dump_autoload', function() { return Artisan::call('cache:clear'); } )->name('dump_autoload');
 Route::get('/get_ably_params', function() { return AblyTokenCreator::getAblyParams(); } )->name('get_ably_params');
 Route::get('/get_client_id', function() { return AblyTokenCreator::getClientId(); } )->name('get_client_id');
 Route::get('/clear_client_id', function() { return AblyTokenCreator::clearClientId(); } )->name('clear_client_id');
