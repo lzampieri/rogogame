@@ -34,18 +34,25 @@ int main( int argc, char *argv[] ) {
 
     cout<<"Finito!"<<endl;
 
-
-
     DataWriter writer;
 
     cout<<"Going to print "<<gmp_red.possibleMoves->size()<<" rows"<<endl;
 
-    // Mosse che deve fare il rosso
     for( const GameState& gs : *gmp_red.gameStatesList ) {
 
-        GameMapperProb* gmp = ( gs.nextPlayer() == GamePlayer::Red ? &gmp_red : &gmp_blu );
+        GamePlayer lastPlayer = GamePlayer( - gs.nextPlayer() );
 
-        writer.evolved_write_row( gs, gmp->possibleMoves->at( gs ), gmp->get( gs ).probWin( gs.nextPlayer() ), gmp->get( gs ).probTie() );
+        // Always watch from the point of view of last player!
+        GameMapperProb* gmp = ( lastPlayer == GamePlayer::Red ? &gmp_red : &gmp_blu );
+
+        // cout<< ( lastPlayer == GamePlayer::Red ? "Red" : "Blu" ) << '\t' << writer.state_code( gs ) << '\t' << gmp->get( gs ).probWin( lastPlayer ) << '\n';
+
+        writer.evolved_write_row(
+            gs,
+            gmp->possibleMoves->at( gs ),
+            gmp->get( gs ).probWin( lastPlayer ),
+            gmp->get( gs ).probTie()
+            );
 
     }
 

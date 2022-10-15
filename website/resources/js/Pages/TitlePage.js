@@ -30,9 +30,9 @@ export default function titlePage( props ) {
                 ( <div className="flex flex-col md:flex-row justify-center items-center text-xl pt-4">
                     <a className="title-page-a" onClick={ () => window.history.back() }>&lt;</a>
                     <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'random'}        ) }>Facile</Link>
-                    <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'probs'}         ) }>Medio</Link>
-                    <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'squared_probs'} ) }>Difficile</Link>
-                    <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'fifth_probs'}   ) }>Impossibile</Link>
+                    <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'easy'}         ) }>Medio</Link>
+                    <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'medium'} ) }>Difficile</Link>
+                    <Link className="title-page-a" href={ route( 'game.play', { pl: props.pl, type: 'hard'}   ) }>Impossibile</Link>
                 </div> )
             }
         </div>

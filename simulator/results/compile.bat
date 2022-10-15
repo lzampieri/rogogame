@@ -1,0 +1,1 @@
+g++ -o main.exe ../*.cpp -std=c++2a -O2

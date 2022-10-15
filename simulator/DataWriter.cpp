@@ -70,7 +70,7 @@ std::string DataWriter::state_code( const GameState gs ) {
     return last_state_code;
 }
 
-void DataWriter::evolved_write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob) {
+void DataWriter::evolved_write_row(const GameState gs, std::vector<arrow>* possible_arrows, double win_prob, double tie_prob ) {
     if( rows_count >= rows_per_file ) {
         close_file();
         new_file( state_code( gs ) );

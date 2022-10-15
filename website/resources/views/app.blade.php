@@ -8,6 +8,10 @@
     <title>Strali</title>
     @inertiaHead
     @routes
+
+    <!-- CSRF Token -->
+    <script type="text/javascript">const csrf_token = "{{ csrf_token() }}"; </script>
+
   </head>
   <body>
     @inertia

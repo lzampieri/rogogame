@@ -10,6 +10,8 @@
     </head>
     <body>
         <h1>Data insertion interface</h1>
+        È in uso il dataset <b>{{ $dataset }}</b>; <a href="{{ route('data_insertion.datasets', 'stay' ) }}">cambia</a>.<br/><br/>
+
         <span id="working" style="color: green">&#x25cf;</span> Worker (<span style="color: green">free</span>/<span style="color: red">working</span>)<br />
         <a href="#" onClick="load_all()">Load all</a>     <a href="#" onClick="truncate()">Truncate</a><br/>
         <small>La prima icona rappresenta il primo file della lista, la seconda l'ultimo. Se appaiono casi in cui le due icone sono diverse, è consigliato svuotare completamente il database.</small>

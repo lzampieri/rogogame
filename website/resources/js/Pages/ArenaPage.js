@@ -7,21 +7,22 @@ import Modal from "../OtherComponents/Modal";
 
 export default class onlineGamePage extends Component {
 
-    constructor() {
-        super()
+    constructor( props ) {
+        super( props )
         this.state = {
             presents: [],
             isChallenging: false,
             isUnderChallenge: false,
             challengedBy: '',
             challengedByName: '',
+            formUname: props.ably.username
         }
     }
 
     componentDidMount( ) {
         this.arenaRemoteManager = new ArenaRemoteManager( );
         this.arenaRemoteManager.connectToArena(
-            this.props.ably.token, this.props.ably.clientId,
+            this.props.ably.token, this.props.ably.clientId, this.props.ably.username,
             ( data ) => this.challenged( data ),
             ( data ) => this.challengeAccepted( data ),
             ( data ) => this.challengeRejected( data ),
@@ -42,7 +43,7 @@ export default class onlineGamePage extends Component {
             this.arenaRemoteManager.sendChallengeAborted( data.from )
         }
         else {
-            this.setState( { isUnderChallenge: true, challengedBy: data.from, challengedByName: 'Anonimo' } )
+            this.setState( { isUnderChallenge: true, challengedBy: data.from, challengedByName: data.fromUsername } )
         }
     }
 
@@ -80,9 +81,9 @@ export default class onlineGamePage extends Component {
                 <div className="flex flex-row flex-wrap justify-center gap-4 w-full md:w-1/3 mt-8 text-center">
                     { this.state.presents.map( ( id ) =>
                         <div
-                            href={id}
+                            // href={id}
                             key={id}
-                            onClick={ () => this.challenge( id ) }
+                            onClick={ () => this.challenge( id.clientId ) }
                             className="
                                 aspect-square shadow-2xl border-2 border-text 
                                 bg-text text-background hover:bg-background hover:text-text 
@@ -90,12 +91,17 @@ export default class onlineGamePage extends Component {
                                 flex flex-col items-center justify-center gap-2
                                 cursor-pointer">
                             <FontAwesomeIcon icon={ faBrain } className="text-2xl"/>
-                            <span>Anonimo</span>
+                            <span>{ id.data.username }</span>
                         </div>
                     ) }
                     { this.state.presents.length == 0 && <span key={0}>In attesa di partecipanti...</span> }
                 </div>
             </div>
+            <form className="absolute inset-x-0 bottom-2 flex flex-row align-center justify-center" method="POST" action={ route('arena.set_uname')}>
+                <input type="hidden" value={ csrf_token } name="_token" />
+                <input className="text-center bg-transparent border-0 border-b-2 border-text rounded w-fit" id="username" name="username" type="text" value={this.state.formUname} onChange={ (e) => this.setState({ formUname: e.target.value })} />
+                <input className="hover:underline ml-3" type="submit" value="Salva" />
+            </form>
             <Modal visible={ this.state.isChallenging }>
                 In attesa dello sfidante...
             </Modal>

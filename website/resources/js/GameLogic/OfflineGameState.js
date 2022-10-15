@@ -8,6 +8,7 @@ export default class OfflineGameState extends GameState {
     constructor( how_many_real, ai_type, setIdCallback ) {
         super( setIdCallback )
         this.ai_type = ai_type;
+        this.how_many_real = how_many_real;
 
         if( how_many_real == 1 ) {
             this.type_red = ( Math.random() < 0.5 ? RealPlayer : AIPlayer );

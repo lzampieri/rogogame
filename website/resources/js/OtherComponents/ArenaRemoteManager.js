@@ -3,6 +3,7 @@ import Ably from 'ably'
 export default class ArenaRemoteManager {
     ably;
     clientId;
+    username;
 
     // Arena channel
     arena_channel;
@@ -22,24 +23,26 @@ export default class ArenaRemoteManager {
         }
     }
     
-    async connect( token, clientId ) {
+    async connect( token, clientId, username ) {
         this.clientId = clientId
+        this.username = username
         
-        this.ably = new Ably.Realtime.Promise( {token: token, clientId: this.clientId} );
+        this.ably = new Ably.Realtime.Promise( {token: token, clientId: this.clientId } );
         await this.ably.connection.once('connected');
         
     }
     
     update_players_list( ) {
         this.arena_channel.presence.get((err, members) => {
+            console.log( members );
             if( err ) this.error_on_channel( err )
-            let ids = members.map( m => m.clientId ).filter( m => m != this.clientId )
+            let ids = members.filter( m => m.clientId != this.clientId )
             this.updatePlayersCallback( ids )
         })
     }
 
     sendChallenge( challenged ) {
-        this.arena_channel.publish( 'challenge:send', { from: this.clientId, to: challenged } )
+        this.arena_channel.publish( 'challenge:send', { from: this.clientId, fromUsername: this.username, to: challenged } )
     }
     getChallenged( data ) {
         if( data.to == this.clientId )
@@ -47,7 +50,7 @@ export default class ArenaRemoteManager {
     }
     
     sendChallengeAccepted( challenged ) {
-        this.arena_channel.publish( 'challenge:accept', { from: this.clientId, to: challenged } )
+        this.arena_channel.publish( 'challenge:accept', { from: this.clientId, fromUsername: this.username, to: challenged } )
     }
     getChallengeAccepted( data ) {
         if( data.to == this.clientId )
@@ -55,7 +58,7 @@ export default class ArenaRemoteManager {
     }
     
     sendChallengeRejected( challenged ) {
-        this.arena_channel.publish( 'challenge:reject', { from: this.clientId, to: challenged } )
+        this.arena_channel.publish( 'challenge:reject', { from: this.clientId, fromUsername: this.username, to: challenged } )
     }
     getChallengeRejected( data ) {
         if( data.to == this.clientId )
@@ -63,7 +66,7 @@ export default class ArenaRemoteManager {
     }
     
     sendChallengeAborted( challenged ) {
-        this.arena_channel.publish( 'challenge:abort', { from: this.clientId, to: challenged } )
+        this.arena_channel.publish( 'challenge:abort', { from: this.clientId, fromUsername: this.username, to: challenged } )
     }
     getChallengeAborted( data ) {
         if( data.to == this.clientId )
@@ -72,7 +75,7 @@ export default class ArenaRemoteManager {
 
 
 
-    async connectToArena( token, clientId, challengedCallback, challengeAcceptedCallback, challengeRejectedCallback, challengeAbortedCallback, updatePlayersCallback ) {
+    async connectToArena( token, clientId, username, challengedCallback, challengeAcceptedCallback, challengeRejectedCallback, challengeAbortedCallback, updatePlayersCallback ) {
         this.challengedCallback = challengedCallback;
         this.challengeAcceptedCallback = challengeAcceptedCallback;
         this.challengeRejectedCallback = challengeRejectedCallback;
@@ -80,7 +83,7 @@ export default class ArenaRemoteManager {
         this.updatePlayersCallback = updatePlayersCallback;
 
         // Connect to arena channel
-        await this.connect( token, clientId );
+        await this.connect( token, clientId, username );
         this.arena_channel = this.ably.channels.get( this.arena_channel_name )
         await this.arena_channel.attach( this.error_on_channel )
 
@@ -91,7 +94,7 @@ export default class ArenaRemoteManager {
         this.arena_channel.subscribe( 'challenge:abort', ( { data } ) => this.getChallengeAborted( data ) )
         
         // Register presence
-        await this.arena_channel.presence.enter( )
+        await this.arena_channel.presence.enter( { username: username } )
         await this.arena_channel.presence.subscribe( () => this.update_players_list() );
         this.update_players_list()
 

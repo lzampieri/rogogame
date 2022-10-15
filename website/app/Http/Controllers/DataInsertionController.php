@@ -2,14 +2,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Move;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DataInsertionController extends Controller {
 
-    public function interface() {
+    public function datasets( Request $request ) {
+        $stay = array_key_exists( 'stay', $request->query() );
+
+        $files_list = Storage::files( 'data' ); # Extract all present files
+        $files_list = array_map( function ( $s ) { return substr( $s, 5, -4 ); }, $files_list ); # Remove "data/" and ".csv"
+        $files_list = array_filter( $files_list, function ( $s ) { return strpos( $s, 'list' ) !== false; } ); # Filter on only lists
+        $files_list = array_values( $files_list ); # Clean array index
+
+        if( count( $files_list ) == 1 && !$stay ) {
+            return redirect()->route( 'data_insertion.list', [ 'dataset' => $files_list[0] ] );
+        }
+
+        return view( 'datainsertion_datasets', [ 'files_list' => $files_list, 'total' => Move::count() ] );
+    }
+
+    public function interface( $dataset ) {
+        // Be sure that the file list exists
+        if( !Storage::has( "data/" . $dataset . ".csv" ) ) {
+            return redirect()->route( 'data_insertion.datasets', 'stay' );
+        }
+
         // Read the list of files
-        $file_list = explode( PHP_EOL, Storage::get( "data/list.csv" ) );
+        $file_list = explode( PHP_EOL, Storage::get( "data/" . $dataset . ".csv" ) );
         array_shift( $file_list ); // Remove the first row
         
         $files = [];
@@ -28,7 +49,7 @@ class DataInsertionController extends Controller {
             ];
         }
 
-        return view( 'datainsertion', ['files' => $files, 'total' => Move::count() ] );
+        return view( 'datainsertion', ['files' => $files, 'total' => Move::count(), 'dataset' => $dataset ] );
     }
 
     public function load( $filename ) {
@@ -65,7 +86,7 @@ class DataInsertionController extends Controller {
     public function truncate() {
         Move::truncate();
 
-        return redirect( route( 'data_insertion') );
+        return redirect( route( 'data_insertion.datasets') );
     }
 
 }

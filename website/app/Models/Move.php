@@ -26,4 +26,11 @@ class Move extends Model
     public function games() {
         return $this->hasMany( Game::class, 'final_state' );
     }
+
+    public function toStringProbs() {
+        return $this->id . " (" .
+            'win: ' . $this->WinProb .
+            ', tie: ' . $this->TieProb .
+            ') ';
+    }
 }

@@ -15,7 +15,7 @@ export default function EndedBanner( props ) {
                     { props.resetCallback && 
                         <span onClick={ props.resetCallback } className="underline cursor-pointer">Reset</span>
                     }
-                    { props.resetCallback && "&nbsp;•&nbsp;" }
+                    { props.resetCallback && <>&nbsp;•&nbsp;</> }
                     <Link href={ route( 'home' ) } className="underline cursor-pointer">Home</Link>
                 </span>
             </div>

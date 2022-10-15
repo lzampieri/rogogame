@@ -19,7 +19,7 @@ Route::get(
         '/move/{type}/{state}',
         [ MovesController::class, 'get' ]
     )
-    ->where('type', '(random|probs|squared_probs|fifth_probs)')
+    ->where('type', '(random|easy|medium|hard)')
     ->name('api_move');
 
 Route::get(

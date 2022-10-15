@@ -39,7 +39,7 @@ Route::get('/game/{pl}', function ( $pl ) {
 Route::get('/game/{pl}/{type}', function ( $pl, $type ) {
     return Inertia::render( 'GamePage', [ 'pl' => $pl, 'type' => $type ] );
 })->where( 'pl', '(0pl|1pl|2pl)' )
-  ->where('type', '(random|probs|squared_probs|fifth_probs)')
+  ->where('type', '(random|easy|medium|hard)')
   ->name('game.play');
 
 Route::get('/rules', function () {
@@ -54,6 +54,8 @@ Route::get('/arena', function () {
   return Inertia::render( 'ArenaPage', [ 'ably' => AblyTokenCreator::getAblyParams() ] );
 })->name('arena');
 
+Route::post('/arena/set_uname', [ AblyTokenCreator::class, 'saveUsername' ])->name('arena.set_uname');
+
 Route::get('/game/multiplayer/{against}/{role}', function ( $against, $role ) {
   return Inertia::render( 'OnlineGamePage', [
     'ably' => AblyTokenCreator::getAblyParams(), 
@@ -65,12 +67,12 @@ Route::get('/game/multiplayer/{against}/{role}', function ( $against, $role ) {
 
 // Various utilities
 Route::get('/utilities', function () { return view('utilities'); } )->name('utilites');
-Route::get('/data_insertion', [ DataInsertionController::class, 'interface' ] )->name('data_insertion');
-Route::get('/data_insertion/{filename}', [ DataInsertionController::class, 'load' ] )->name('data_insertion.load');
+Route::get('/data_insertion', [ DataInsertionController::class, 'datasets' ] )->name('data_insertion.datasets');
+Route::get('/data_insertion/{dataset}', [ DataInsertionController::class, 'interface' ] )->name('data_insertion.list');
+Route::get('/data_insertion/load/{filename}', [ DataInsertionController::class, 'load' ] )->name('data_insertion.load');
 Route::get('/data_insertion_truncate', [ DataInsertionController::class, 'truncate' ] )->name('data_insertion.truncate');
 Route::get('/migrate', function() { return Artisan::call('migrate'); } )->name('migrate');
 Route::get('/clear_cache', function() { return Artisan::call('cache:clear'); } )->name('clear_cache');
-Route::get('/dump_autoload', function() { return Artisan::call('cache:clear'); } )->name('dump_autoload');
 Route::get('/get_ably_params', function() { return AblyTokenCreator::getAblyParams(); } )->name('get_ably_params');
 Route::get('/get_client_id', function() { return AblyTokenCreator::getClientId(); } )->name('get_client_id');
 Route::get('/clear_client_id', function() { return AblyTokenCreator::clearClientId(); } )->name('clear_client_id');

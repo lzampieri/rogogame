@@ -28,11 +28,19 @@ class MovesController extends Controller {
             return response( 'State already final', 404 );
         }
 
+        // echo "State: " . $the_state->toStringProbs() . "<br/><br/>";
+
         // Collect all possible moves and their probability
         $next_move = array();
+        $next_states_win_prob = array();
+        $next_states_tie_prob = array();
+        $max_win_prob = 0;
+        $max_tie_prob = 0;
+
         foreach( $the_state->PossibleArrows as $arrow ) {
 
             $parsed_state = GameState::fromMove( $the_state );
+
             $parsed_state->add( $arrow );
             try {
                 $new_state = $parsed_state->getMove();
@@ -40,28 +48,54 @@ class MovesController extends Controller {
                 return response( 'Error in the database. Cannot find ' . $parsed_state->getId(), 404 );
             }
 
-            $next_move[ $arrow ] = $new_state->WinProb + $new_state->TieProb / 10;
-        
+            $next_states_win_prob[ $arrow ] = $new_state->WinProb;
+            $next_states_tie_prob[ $arrow ] = $new_state->TieProb;
+            $max_win_prob = max( $max_win_prob, $new_state->WinProb );
+            $max_tie_prob = max( $max_tie_prob, $new_state->TieProb );
+
+            // echo "Considered move " . $arrow . ", state: " . $new_state->toStringProbs() . "<br/><br/>";
+        }
+
+        // If no win or tie probability, all fallback to random
+        if( $max_win_prob == 0 && $max_tie_prob == 0 )
+            $type = 'random';
+
+        // If no win probability, medium fallback to easy
+        if( $max_win_prob == 0 && $type == 'medium' )
+            $type = 'easy';
+
+        // If no win probability, hard evolves in tie_hard
+        if( $max_win_prob == 0 && $type == 'hard' )
+            $type = 'tie_hard';
+
+        // echo "Type: " . $type . "<br/>";
+
+        foreach( $next_states_win_prob as $arrow => $foo ) {
+
+            // Different behaviors
+            // Random case: all have same prob
             if( $type == 'random' )
-                $next_move[ $arrow ] ** 0;
-            elseif( $type == 'probs' )
-                $next_move[ $arrow ] ** 1;
-            elseif( $type == 'squared_probs' )
-                $next_move[ $arrow ] ** 2;
-            elseif( $type == 'fifth_probs' )
-                $next_move[ $arrow ] ** 5;
+                $next_move[ $arrow ] = 1;
+            
+            // Easy case: prob proportional to win or tie
+            if( $type == 'easy' )
+                $next_move[ $arrow ] = $next_states_win_prob[ $arrow ] + $next_states_tie_prob[ $arrow ] / 10;
+
+            // Hard case: prob proportional to win
+            if( $type == 'medium' )
+                $next_move[ $arrow ] = $next_states_win_prob[ $arrow ] ** 4;
+
+            // Impossible case: only optimal values are accepted
+            if( $type == 'hard' )
+                $next_move[ $arrow ] = ( $next_states_win_prob[ $arrow ] == $max_win_prob ? 1 : 0 );
+
+            // Impossible case when no win is possible: only optimal values are accepted
+            if( $type == 'tie_hard' )
+                $next_move[ $arrow ] = ( $next_states_tie_prob[ $arrow ] == $max_tie_prob ? 1 : 0 );
         }
 
         // Get total
         $total = array_sum( $next_move );
-
-        // If no win prob, all have same prob
-        if( $total == 0 ) {
-            foreach( $next_move as &$move ) {
-                $move = 0.1;
-                $total += 0.1;
-            }
-        }
 
         // Generate a random number between 0 and total
         $choice = mt_rand( 0, mt_getrandmax() - 1 ) / mt_getrandmax() * $total;
