@@ -14,7 +14,7 @@ export default function titlePage( props ) {
                     <Link className="title-page-a" href={ route('game.select_players') }>gioca</Link>
                     <Link className="title-page-a" href={ route('arena') }>arena</Link>
                     <Link className="title-page-a" href={ route('rules') }>regole</Link>
-                    <a className="title-page-a" onClick={ unimplemeted }>statistiche</a>
+                    <Link className="title-page-a" href={ route('stats') }>statistiche</Link>
                     <Link className="title-page-a" href={ route('about') }>informazioni</Link>
                 </div> )
             }

@@ -6,7 +6,7 @@ export default function Modal( props ) {
         <div className="
             w-full h-full absolute top-0 right-0
             z-40
-            bg-black
+            bg-semiblack
             flex flex-col items-center justify-center
             ">
             <div className="

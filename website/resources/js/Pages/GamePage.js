@@ -8,44 +8,47 @@ import { AIPlayer, BluPlayer, RealPlayer, RedPlayer } from "../GameLogic/Enumera
 import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from 'notistack';
 
 export default class GamePage extends Component {
-    constructor( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
         this.state = {
-            gamestate: new OfflineGameState( parseInt( props.pl ), props.type, ( new_id ) => this.setState( { saved_id: new_id } ) ),
+            gamestate: new OfflineGameState(parseInt(props.pl), props.type, (new_id) => this.setState({ saved_id: new_id })),
             saved_id: null
         }
-        this.AI = new AI( props.type );
+        this.AI = new AI(props.type);
     }
 
-    addArrow( arr ) {
+    addArrow(arr) {
         closeSnackbar();
-        if( this.state.gamestate.drawable( arr ) ) {
+        if (this.state.gamestate.drawable(arr)) {
             let newState = this.state.gamestate;
-            newState.add( arr );
+            newState.add(arr);
 
-            this.setState( { gamestate: newState } );
+            this.setState({ gamestate: newState });
         } else {
-            enqueueSnackbar( 'Mossa non permessa.', { variant: 'warning' } );
+            enqueueSnackbar('Mossa non permessa.', { variant: 'warning' });
         }
     }
 
-    resetGame( ) {
-        this.setState( { gamestate: new OfflineGameState( this.state.gamestate.how_many_real, this.state.gamestate.ai_type, this.state.gamestate.setIdCallback ) } );
+    resetGame() {
+        this.setState({
+            gamestate: new OfflineGameState(this.state.gamestate.how_many_real, this.state.gamestate.ai_type, this.state.gamestate.setIdCallback),
+            saved_id: null
+        });
     }
 
-    checkForAI( state ) {
-        if( this.state.gamestate.ended() ) return;
-        if( this.state.gamestate.nextPlayerType() == AIPlayer ) {
-            this.AI.get( state, ( arr ) => this.addArrow( arr ) );     
+    checkForAI(state) {
+        if (this.state.gamestate.ended()) return;
+        if (this.state.gamestate.nextPlayerType() == AIPlayer) {
+            this.AI.get(state, (arr) => this.addArrow(arr));
         }
     }
 
     componentDidMount() {
-        this.checkForAI( this.state.gamestate )
+        this.checkForAI(this.state.gamestate)
     }
 
     componentDidUpdate() {
-        this.checkForAI( this.state.gamestate )
+        this.checkForAI(this.state.gamestate)
     }
 
     render() {
@@ -55,26 +58,26 @@ export default class GamePage extends Component {
                 <SideColumn
                     side={RedPlayer}
                     gamestate={this.state.gamestate}
-                    />
-                
+                />
+
                 <div className="grow flex flex-col items-center">
                     <CentralCanvas
                         gamestate={this.state.gamestate}
-                        addArrow={ (arr) => this.addArrow( arr ) }
+                        addArrow={(arr) => this.addArrow(arr)}
                         drawingActive={this.state.gamestate.nextPlayerType() == RealPlayer}
                     />
                     <div className="bg-info rounded-full  m-1 px-2 text-sm">
                         <span className="text-info_contrast">#{this.state.gamestate.hash()}</span>
-                        { this.state.saved_id && <>
+                        {this.state.saved_id && <>
                             &nbsp;-&nbsp;<span className="text-player1-parque">#{this.state.saved_id}</span>
                         </>}
                     </div>
                 </div>
-                
+
                 <SideColumn
                     side={BluPlayer}
                     gamestate={this.state.gamestate}
-                    />
+                />
             </div>
             <EndedBanner
                 gameState={this.state.gamestate} resetCallback={() => this.resetGame()}
