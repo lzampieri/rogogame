@@ -68,6 +68,10 @@ bool GameState::drawable( arrow a ) const {
     arrow to = arr_to( a );
     if( ( to > N ) || ( from == to ) )
         throw std::domain_error("Trying to deposit invalid arc!");
+
+    // Check for arc length
+    if( arr_len( a ) > all_arrows_size() )
+        return false;
     
     // Check the arc is not already drawned
     // and that the departure and arrival vertices are available

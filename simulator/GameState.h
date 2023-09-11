@@ -20,6 +20,7 @@ public:
 
     inline arrow arr_from( const arrow a ) const { return a % N; };
     inline arrow arr_to( const arrow a ) const { return a / N; };
+    inline arrow arr_len( const arrow a ) const { return std::min( std::abs( arr_from( a ) - arr_to( a ) ), N - std::abs( arr_from( a ) - arr_to( a ) ) ); };
 
     GameState( const arrow N );
     GameState( const GameState &old_gs );
